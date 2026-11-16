@@ -49,6 +49,9 @@
   .banner .t2{font-size:28px;font-weight:500;margin-top:2px}
   .after-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
   .note{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+  .loading{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;color:#6b7280;z-index:10}
+  .loading[hidden]{display:none}
+  .btn:disabled{opacity:.6;cursor:wait}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.2s;pointer-events:none}
   .toast.on{opacity:1}
   /* 상태별 표시 */
@@ -102,10 +105,12 @@
       <label>사업자번호<input id="m_cBizno"></label>
       <label class="full">주소<input id="m_cAddr"></label>
     </div>
+    <div class="grid" style="margin-top:12px"><label>관리 비밀번호<input id="m_pin" type="password" inputmode="numeric" placeholder="링크 만들 때 필요"></label></div>
     <div class="mk-actions">
       <button class="btn sm" id="mkLink" type="button">계약 링크 만들기</button>
       <button class="btn sm ghost" id="mkPreview" type="button">광고주 화면 미리보기</button>
     </div>
+    <div class="err" id="mkErr"></div>
     <div class="linkbox" id="linkWrap" hidden>
       <input id="linkOut" readonly>
       <button class="btn sm" id="copyLink" type="button">복사</button>
@@ -254,27 +259,36 @@
   </main>
 </div>
 <div class="toast" id="toast"></div>
+<div class="loading" id="loading" hidden>계약서를 불러오는 중…</div>
 
 <script>
 (function(){
-  // 사이트에 올린 계약서 주소 (미리보기 화면에서 링크를 만들 때 사용)
-  var BASE_URL='https://airpick-b2c.web.app/contract-ad.html';
+  // ── 설정 ─────────────────────────────────────────
+  // 구글 Apps Script 웹앱 주소 (배포 후 붙여 넣기). 비워 두면 긴 링크 방식으로 동작
+  var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxLXB43pKJLlV7cQ033Lh9-DQomUPT3h5y9dMRDcM9_ixgFRc2wrH72QF_g5o7wOlAp/exec';
+  // 미리보기 화면에서 링크를 만들 때 쓰는 계약서 주소
+  var BASE_URL='https://ingompunch-airpick.github.io/contract/ad.html';
+  // ────────────────────────────────────────────────
   var FIELDS=['product','keyword','payDate','period','amount','cName','cCeo','cTel','cBizno','cAddr'];
   var LABEL={cName:'업체명',cCeo:'대표자',cTel:'연락처',cBizno:'사업자번호',cAddr:'주소'};
   var $=function(id){return document.getElementById(id)};
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
-  // 링크 데이터: ?c=<base64url(JSON)>
   function enc(o){var b=new TextEncoder().encode(JSON.stringify(o)),s='';b.forEach(function(x){s+=String.fromCharCode(x)});return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
   function dec(t){try{t=t.replace(/-/g,'+').replace(/_/g,'/');var s=atob(t),b=new Uint8Array(s.length);for(var i=0;i<s.length;i++)b[i]=s.charCodeAt(i);return JSON.parse(new TextDecoder().decode(b))}catch(e){return null}}
-  function code(o){var s=JSON.stringify(o),h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0}return 'GC-'+(h>>>0).toString(36).toUpperCase().padStart(7,'0')}
+  function hash(o){var s=JSON.stringify(o),h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0}return 'GC-'+(h>>>0).toString(36).toUpperCase().padStart(7,'0')}
   function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},1800)}
   function copy(text){
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast('복사했습니다')},function(){fallback(text)})}else fallback(text);
   }
   function fallback(text){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('복사했습니다')}catch(e){toast('복사가 안 되면 길게 눌러 복사하세요')}ta.remove()}
+  function api(method,payload,query){
+    var opt=method==='POST'?{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}:{};
+    return fetch(SCRIPT_URL+(query||''),opt).then(function(r){return r.json()});
+  }
 
-  var data=null;
-  function render(d){
+  var data=null,contractId=null;
+  function render(d,cno){
     data=d||{};
     document.querySelectorAll('[data-v]').forEach(function(td){td.textContent=data[td.dataset.v]||''});
     document.querySelectorAll('[data-c]').forEach(function(td){
@@ -287,23 +301,40 @@
     var ceo=document.querySelector('[data-in="cCeo"]');
     function syncName(){$('signName').textContent=ceo.value.trim()||'　　　　'}
     ceo.addEventListener('input',syncName);syncName();
-    $('cno').textContent=code(data);
+    $('cno').textContent=cno||hash(data);
     $('app').classList.remove('done');$('err').textContent='';
+  }
+
+  function showDone(d){
+    data=d;
+    document.querySelectorAll('[data-c]').forEach(function(td){td.textContent=d[td.dataset.c]||''});
+    $('signName').textContent=d.cCeo||'';
+    var m=(d.agreedAt||'').match(/(\d{4})-(\d{2})-(\d{2})/),dt=m?{y:+m[1],mo:+m[2],d:+m[3]}:null;
+    if(!dt){var n=new Date();dt={y:n.getFullYear(),mo:n.getMonth()+1,d:n.getDate()}}
+    $('agreeDate').textContent=dt.y+'년 '+dt.mo+'월 '+dt.d+'일';
+    $('bigDate').textContent=dt.mo+'月'+dt.d+'日'+dt.y+'年';
+    $('bannerDate').textContent=dt.y+'년 '+dt.mo+'월 '+dt.d+'일 동의완료';
+    $('app').classList.add('done');
   }
 
   // 동의하기
   $('okBtn').addEventListener('click',function(){
-    var ins=document.querySelectorAll('[data-in]'),miss=[];
-    ins.forEach(function(el){if(!el.value.trim())miss.push(LABEL[el.dataset.in])});
+    var ins=document.querySelectorAll('[data-in]'),miss=[],client={};
+    ins.forEach(function(el){var v=el.value.trim();client[el.dataset.in]=v;if(!v)miss.push(LABEL[el.dataset.in])});
     if(miss.length){$('err').textContent='광고주 정보를 입력해 주세요: '+miss.join(', ');return}
-    ins.forEach(function(el){data[el.dataset.in]=el.value.trim();el.parentNode.textContent=el.value.trim()});
-    var d=new Date(),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate(),p=function(n){return String(n).padStart(2,'0')};
-    data.agreedAt=y+'-'+p(m)+'-'+p(day)+' '+p(d.getHours())+':'+p(d.getMinutes());
-    $('agreeDate').textContent=y+'년 '+m+'월 '+day+'일';
-    $('bigDate').textContent=m+'月'+day+'日'+y+'年';
-    $('bannerDate').textContent=y+'년 '+m+'월 '+day+'일 동의완료';
-    $('app').classList.add('done');
-    document.querySelector('.banner').scrollIntoView({behavior:'smooth',block:'center'});
+    var p=function(n){return String(n).padStart(2,'0')},n=new Date();
+    var local=Object.assign({},data,client,{agreedAt:n.getFullYear()+'-'+p(n.getMonth()+1)+'-'+p(n.getDate())+' '+p(n.getHours())+':'+p(n.getMinutes())});
+    if(contractId&&SCRIPT_URL){
+      var btn=$('okBtn');btn.disabled=true;btn.textContent='저장 중…';$('err').textContent='';
+      api('POST',{action:'agree',id:contractId,client:client,ua:navigator.userAgent}).then(function(r){
+        if(!r.ok)throw new Error(r.error);
+        showDone(r.data);document.querySelector('.banner').scrollIntoView({behavior:'smooth',block:'center'});
+      }).catch(function(){
+        btn.disabled=false;btn.textContent='동의하기';$('err').textContent='저장에 실패했습니다. 잠시 후 다시 눌러 주세요.';
+      });
+    }else{
+      showDone(local);document.querySelector('.banner').scrollIntoView({behavior:'smooth',block:'center'});
+    }
   });
 
   // 동의 내용 복사 (카톡 전달용)
@@ -312,28 +343,48 @@
       '계약번호: '+$('cno').textContent,
       '업체명: '+data.cName,'대표자: '+data.cCeo,'연락처: '+data.cTel,'사업자번호: '+data.cBizno,'주소: '+data.cAddr,
       '계약 상품: '+(data.product||'-'),'작업 키워드: '+(data.keyword||'-'),'계약 기간: '+(data.period||'-'),'결제 금액: '+(data.amount||'-'),
-      '동의 일시: '+data.agreedAt,
+      '동의 일시: '+(data.agreedAt||''),
       '위 계약 약관을 모두 확인하였으며 동의합니다.'].join('\n'));
   });
 
-  // PDF 저장: 자체 사이트에서 열었을 때만 표시
   var topLevel=false;try{topLevel=window.self===window.top}catch(e){}
   if(topLevel){$('printBtn').hidden=false;$('printBtn').addEventListener('click',function(){try{window.print()}catch(e){}})}
 
   // 작성 모드
   function makerData(){var o={};FIELDS.forEach(function(k){var v=$('m_'+k).value.trim();if(v)o[k]=v});return o}
-  $('mkLink').addEventListener('click',function(){
+  function baseUrl(){
     var here=/^https?:$/.test(location.protocol)&&location.origin!=='null'&&!/claude\.ai|claudeusercontent/.test(location.host);
-    var url=(here?location.origin+location.pathname:BASE_URL)+'?c='+enc(makerData());
-    $('linkOut').value=url;$('linkWrap').hidden=false;render(makerData());
+    return here?location.origin+location.pathname:BASE_URL;
+  }
+  $('m_pin').value=store.get('gc_pin')||'';
+  $('mkLink').addEventListener('click',function(){
+    var d=makerData();$('mkErr').textContent='';
+    if(!SCRIPT_URL){$('linkOut').value=baseUrl()+'?c='+enc(d);$('linkWrap').hidden=false;render(d);return}
+    var pin=$('m_pin').value.trim();if(!pin){$('mkErr').textContent='관리 비밀번호를 입력해 주세요.';return}
+    var btn=$('mkLink');btn.disabled=true;btn.textContent='만드는 중…';
+    api('POST',{action:'create',kind:'광고',pin:pin,data:d}).then(function(r){
+      if(!r.ok){$('mkErr').textContent=r.error==='pin'?'관리 비밀번호가 틀렸습니다.':'링크를 만들지 못했습니다.';return}
+      store.set('gc_pin',pin);
+      $('linkOut').value=baseUrl()+'?id='+r.id;$('linkWrap').hidden=false;render(d,r.id);
+    }).catch(function(){$('mkErr').textContent='연결에 실패했습니다. 잠시 후 다시 시도해 주세요.'})
+    .finally(function(){btn.disabled=false;btn.textContent='계약 링크 만들기'});
   });
   $('copyLink').addEventListener('click',function(){copy($('linkOut').value)});
   $('mkPreview').addEventListener('click',function(){render(makerData());$('app').scrollIntoView({behavior:'smooth'})});
-  document.querySelectorAll('.maker input').forEach(function(el){el.addEventListener('input',function(){render(makerData())})});
+  document.querySelectorAll('.maker input').forEach(function(el){
+    if(el.id!=='m_pin')el.addEventListener('input',function(){render(makerData())});
+  });
 
-  // 시작: ?c= 가 있으면 광고주 화면, 없으면 작성 모드
-  var c=new URLSearchParams(location.search).get('c'),d=c?dec(c):null;
-  if(d){render(d)}else{$('maker').hidden=false;render({})}
+  // 시작: ?id= (짧은 링크) / ?c= (긴 링크) / 없으면 작성 모드
+  var q=new URLSearchParams(location.search),id=q.get('id'),c=q.get('c');
+  if(id&&SCRIPT_URL){
+    contractId=id.toUpperCase();$('loading').hidden=false;
+    api('GET',null,'?id='+encodeURIComponent(contractId)).then(function(r){
+      if(!r.ok){$('loading').textContent='계약서를 찾을 수 없습니다. 링크를 다시 확인해 주세요.';return}
+      render(r.data,r.id);if(r.status==='동의완료')showDone(r.data);$('loading').hidden=true;
+    }).catch(function(){$('loading').textContent='계약서를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.'});
+  }else if(c&&dec(c)){render(dec(c))}
+  else{$('maker').hidden=false;render({})}
 })();
 </script>
 </body>
