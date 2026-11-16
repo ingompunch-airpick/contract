@@ -97,14 +97,6 @@
       <label>계약 기간<input id="m_period" placeholder="예) 25일"></label>
       <label>결제 금액<input id="m_amount" placeholder="예) 3,850,000원 (VAT 포함)"></label>
     </div>
-    <div class="sub">광고주 정보를 미리 알고 있으면 채워 두세요. 비워 두면 광고주가 직접 입력합니다.</div>
-    <div class="grid">
-      <label>업체명<input id="m_cName"></label>
-      <label>대표자<input id="m_cCeo"></label>
-      <label>연락처<input id="m_cTel"></label>
-      <label>사업자번호<input id="m_cBizno"></label>
-      <label class="full">주소<input id="m_cAddr"></label>
-    </div>
     <div class="grid" style="margin-top:12px"><label>관리 비밀번호<input id="m_pin" type="password" inputmode="numeric" placeholder="링크 만들 때 필요"></label></div>
     <div class="mk-actions">
       <button class="btn sm" id="mkLink" type="button">계약 링크 만들기</button>
@@ -269,7 +261,7 @@
   // 미리보기 화면에서 링크를 만들 때 쓰는 계약서 주소
   var BASE_URL='https://ingompunch-airpick.github.io/contract/ad.html';
   // ────────────────────────────────────────────────
-  var FIELDS=['product','keyword','payDate','period','amount','cName','cCeo','cTel','cBizno','cAddr'];
+  var FIELDS=['product','keyword','payDate','period','amount'];
   var LABEL={cName:'업체명',cCeo:'대표자',cTel:'연락처',cBizno:'사업자번호',cAddr:'주소'};
   var $=function(id){return document.getElementById(id)};
   var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};

@@ -105,12 +105,6 @@
       <label class="full">계약 기간<select id="m_period"></select></label>
       <label class="full">특약 사항 (없으면 비워 두세요)<input id="m_special" placeholder="예) 첫 3개월 수수료 5% 적용"></label>
     </div>
-    <div class="sub">업체 정보를 미리 알면 채워 두세요. 비워 두면 업체가 직접 입력합니다.</div>
-    <div class="grid">
-      <label>업체명<input id="m_cName"></label>
-      <label>대표자<input id="m_cCeo"></label>
-      <label>연락처<input id="m_cTel"></label>
-    </div>
     <div class="grid" style="margin-top:12px"><label>관리 비밀번호<input id="m_pin" type="password" inputmode="numeric" placeholder="링크 만들 때 필요"></label></div>
     <div class="mk-actions">
       <button class="btn sm" id="mkLink" type="button">계약 링크 만들기</button>
@@ -344,7 +338,7 @@
   var BASE_URL='https://ingompunch-airpick.github.io/contract/partner.html';
   var KIND='입점';
   // ────────────────────────────────────────────────
-  var MAKER=['airport','fee','period','special','cName','cCeo','cTel'];
+  var MAKER=['airport','fee','period','special'];
   var CLIENT={
     cName:{l:'업체명',ph:'업체명 (상호)'},
     cCeo:{l:'대표자',ph:'대표자 성명'},
