@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>곰컴퍼니 광고 계약서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#2c66c8;--blue-d:#2456ad;--line:#a9a9a9;--muted:#6b7280;--red:#c0392b}
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef0f3;color:#111;font-family:"Noto Sans KR",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 0 60px}
+  .doc{background:#fff;padding:0 22px 40px}
+  header.top{display:flex;align-items:center;gap:12px;padding:22px 0 18px;border-bottom:3px solid var(--blue)}
+  .logo{width:44px;height:44px;flex:none}
+  header.top .co{font-size:13px;color:var(--muted);line-height:1.3}
+  header.top h1{margin:0;font-size:21px;letter-spacing:-.4px;line-height:1.35}
+  .cno{text-align:right;font-size:12.5px;color:var(--muted);margin:8px 0 0}
+  .lead{margin:22px 0 4px}
+  h2{font-size:16px;font-weight:700;margin:30px 0 10px;display:flex;align-items:center;gap:8px}
+  h2::before{content:"";width:4px;height:16px;background:var(--blue);border-radius:2px}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{border:1px solid var(--line);padding:13px 16px;vertical-align:middle}
+  th{width:28%;font-weight:700;text-align:center;background:#f7f8fa}
+  td input{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:9px 11px;font:inherit;font-size:15px;background:#fffdf2}
+  td input:focus{outline:2px solid var(--blue);border-color:var(--blue);background:#fff}
+  .hint{font-size:13px;font-weight:500;color:var(--blue)}
+  .terms{border:1px solid #e3e5e8;border-radius:10px;padding:4px 18px 18px;max-height:420px;overflow:auto;background:#fcfcfd}
+  .terms h3{font-size:15px;margin:22px 0 6px}
+  .terms p{margin:5px 0}
+  .terms ol,.terms ul{margin:5px 0;padding-left:22px}
+  .terms .ex{background:#f1f3f6;border-radius:8px;padding:10px 14px;margin:8px 0}
+  .agree{text-align:center;margin-top:40px}
+  .agree .q{font-weight:700;font-size:16px}
+  .agree .date{margin-top:8px}
+  .agree .sign{margin-top:14px}
+  .btn{background:var(--blue);color:#fff;border:0;border-radius:10px;font:inherit;font-weight:700;font-size:16px;padding:14px 36px;cursor:pointer}
+  .btn:hover{background:var(--blue-d)}
+  .btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+  .btn.sm{font-size:14px;padding:9px 16px}
+  .err{color:var(--red);font-size:14px;margin-top:10px;min-height:1em}
+  .company{margin-top:44px}
+  .company .bigdate{text-align:center;font-weight:800;font-size:20px;margin-bottom:12px}
+  .ceo{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px}
+  .seal{width:92px;height:92px}
+  .foot{font-weight:700;font-size:13.5px;margin-top:8px;word-break:keep-all}
+  .banner{background:var(--blue);color:#fff;text-align:center;padding:14px 10px 18px;margin-top:8px}
+  .banner .t1{font-size:32px;font-weight:800;letter-spacing:-.5px}
+  .banner .t2{font-size:28px;font-weight:500;margin-top:2px}
+  .after-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .note{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;transition:.2s;pointer-events:none}
+  .toast.on{opacity:1}
+  /* 상태별 표시 */
+  .show-done,.done .show-pending{display:none!important}
+  .done .show-done{display:block!important}
+  .done .after-tools.show-done{display:flex!important}
+  .done .terms{max-height:none}
+  /* 작성 모드 */
+  .maker{background:#fff;border-bottom:1px solid #dfe3e8;padding:18px 22px 20px}
+  .maker h2{margin-top:4px}
+  .maker .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .maker label{display:block;font-size:13px;color:var(--muted)}
+  .maker label input{display:block;width:100%;margin-top:3px;border:1px solid #cfd4dc;border-radius:8px;padding:9px 11px;font:inherit;font-size:15px}
+  .maker .full{grid-column:1/-1}
+  .maker .sub{font-size:13px;color:var(--muted);margin:14px 0 6px}
+  .linkbox{display:flex;gap:8px;margin-top:14px}
+  .linkbox input{flex:1;border:1px solid #cfd4dc;border-radius:8px;padding:9px 11px;font:inherit;font-size:13px;background:#f7f8fa}
+  .mk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .mk-tag{display:inline-block;background:#e8effb;color:var(--blue);font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:middle}
+  @media (max-width:560px){
+    .doc{padding:0 14px 32px}
+    th,td{padding:10px;font-size:14px} th{width:32%}
+    header.top h1{font-size:18px}
+    .banner .t1{font-size:23px} .banner .t2{font-size:19px}
+    .maker .grid{grid-template-columns:1fr}
+  }
+  @media print{
+    body{background:#fff} .maker,.after-tools,.note,.toast,.btn{display:none!important}
+    .terms{max-height:none;overflow:visible;border:0;padding:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ① 작성 모드: 곰컴퍼니가 계약 사항을 넣고 링크를 만든다 -->
+  <section class="maker" id="maker" hidden>
+    <h2>계약서 링크 만들기 <span class="mk-tag">곰컴퍼니 전용</span></h2>
+    <div class="grid">
+      <label class="full">계약 상품<input id="m_product" placeholder="예) 월보장 후불제 25일 (1달) 1~5위 보장"></label>
+      <label>작업 키워드<input id="m_keyword" placeholder="예) 인천공항 주차대행"></label>
+      <label>계약 및 결제일자<input id="m_payDate" placeholder="예) 2026-11-17 (1페이지 진입 후 결제)"></label>
+      <label>계약 기간<input id="m_period" placeholder="예) 25일"></label>
+      <label>결제 금액<input id="m_amount" placeholder="예) 3,850,000원 (VAT 포함)"></label>
+    </div>
+    <div class="sub">광고주 정보를 미리 알고 있으면 채워 두세요. 비워 두면 광고주가 직접 입력합니다.</div>
+    <div class="grid">
+      <label>업체명<input id="m_cName"></label>
+      <label>대표자<input id="m_cCeo"></label>
+      <label>연락처<input id="m_cTel"></label>
+      <label>사업자번호<input id="m_cBizno"></label>
+      <label class="full">주소<input id="m_cAddr"></label>
+    </div>
+    <div class="mk-actions">
+      <button class="btn sm" id="mkLink" type="button">계약 링크 만들기</button>
+      <button class="btn sm ghost" id="mkPreview" type="button">광고주 화면 미리보기</button>
+    </div>
+    <div class="linkbox" id="linkWrap" hidden>
+      <input id="linkOut" readonly>
+      <button class="btn sm" id="copyLink" type="button">복사</button>
+    </div>
+  </section>
+
+  <!-- ② 계약서 본문 (광고주가 보는 화면) -->
+  <main class="doc" id="app">
+    <header class="top">
+      <svg class="logo" viewBox="0 0 44 44" aria-hidden="true"><rect x="1.5" y="1.5" width="41" height="41" rx="4" fill="none" stroke="#c0392b" stroke-width="3"/><text x="22" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">곰컴</text><text x="22" y="35" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">퍼니</text></svg>
+      <div><div class="co">곰컴퍼니</div><h1>네이버 플레이스 상위 노출 광고 월보장 서비스 계약서</h1></div>
+    </header>
+    <div class="cno">계약번호 <span id="cno">-</span></div>
+
+    <p class="lead">광고주(이하 "갑"이라 함)와 광고사 곰컴퍼니(이하 "을"이라 함)는 네이버 플레이스 상위 노출 광고 서비스 제공에 관하여 다음과 같이 합의하고 본 계약을 체결한다.</p>
+
+    <h2>광고회사 정보</h2>
+    <table>
+      <tr><th>업체명</th><td>곰컴퍼니</td></tr>
+      <tr><th>대표자</th><td>김인원</td></tr>
+      <tr><th>사업자번호</th><td>776-32-01655</td></tr>
+      <tr><th>주소</th><td>인천시 영종구 자연대로29, 2017호</td></tr>
+    </table>
+
+    <h2>광고주 정보 <span class="hint show-pending">· 직접 입력해 주세요</span></h2>
+    <table id="clientTbl">
+      <tr><th>업체명</th><td data-c="cName"></td></tr>
+      <tr><th>대표자</th><td data-c="cCeo"></td></tr>
+      <tr><th>연락처</th><td data-c="cTel"></td></tr>
+      <tr><th>사업자번호</th><td data-c="cBizno"></td></tr>
+      <tr><th>주소</th><td data-c="cAddr"></td></tr>
+    </table>
+
+    <h2>계약 사항</h2>
+    <table>
+      <tr><th>계약 상품</th><td data-v="product"></td></tr>
+      <tr><th>작업 키워드</th><td data-v="keyword"></td></tr>
+      <tr><th>계약 및 결제일자</th><td data-v="payDate"></td></tr>
+      <tr><th>계약 기간</th><td data-v="period"></td></tr>
+      <tr><th>결제 금액</th><td data-v="amount"></td></tr>
+    </table>
+
+    <h2>계약 약관</h2>
+    <div class="terms">
+    <h3>제1조 (계약의 목적)</h3>
+    <p>본 계약은 을이 제공하는 네이버 플레이스 상위 노출 광고 서비스를 갑이 이용함에 있어 계약 당사자 간의 권리·의무 및 제반 사항을 명확히 함을 목적으로 한다.</p>
+
+    <h3>제2조 (계약의 성립 및 효력)</h3>
+    <p>① 본 계약은 다음 각 호의 어느 하나에 해당하는 방법으로 갑의 계약 체결 의사가 표시될 때 성립한다.</p>
+    <ol>
+      <li>계약서에 서명, 동의하기 또는 날인</li>
+      <li>전자적 방법(이메일, 메시지 등)을 통한 동의</li>
+      <li>계약 조건에 대한 구두 합의 후 통화 녹음을 통한 확인</li>
+      <li>결제 정보 전달 및 대금 지급</li>
+    </ol>
+    <p>② 본 계약은 다음 각 호의 어느 하나에 해당하는 시점부터 효력이 발생한다.</p>
+    <ol>
+      <li>선불 계약의 경우: 대금이 지급된 시점</li>
+      <li>후불 계약의 경우: 을이 서비스 제공을 개시한 시점</li>
+    </ol>
+
+    <h3>제3조 (서비스의 내용 및 대금)</h3>
+    <p>① 을은 갑에게 별지 계약서에 명시된 키워드에 대하여 네이버 플레이스 상위 노출 서비스를 제공한다.</p>
+    <p>② 월 보장 후불제 상품의 경우, 을은 계약 성립 후 선(先) 작업을 개시하며, 을의 귀책사유 없이 중단하지 아니하는 한 계약 내용에 따라 작업을 계속 이행한다.</p>
+    <p>③ 갑이 작업 진행 중 계약 해지를 요청하는 경우, 해당 시점까지 을이 투입한 작업 비용을 갑이 부담하며, 그 산정 기준은 다음과 같다.</p>
+    <ul>
+      <li>블로그 배포: 건당 3,300원(부가가치세 포함)</li>
+      <li>리워드 트래픽: 1유입당 88원(부가가치세 포함)</li>
+      <li>리워드 저장: 1유입당 110원(부가가치세 포함)</li>
+      <li>리워드 길 찾기: 1유입당 110원(부가가치세 포함)</li>
+    </ul>
+    <p>④ 본 서비스는 네이버 플레이스 검색 결과 상위 노출을 목적으로 하며, 구체적인 목표 순위 및 키워드는 별지 계약서에 명시된 바에 따른다.</p>
+    <p>⑤ 갑은 을이 제공하는 서비스를 성실히 활용하여야 하며, 을의 서비스 이용 권고 사항을 합리적인 사유 없이 거부하여 발생한 성과 부진에 대한 책임은 갑에게 있다.</p>
+
+    <h3>제4조 (을의 의무)</h3>
+    <p>① 을은 본 계약에서 정한 서비스를 신의성실의 원칙에 따라 성실히 제공하여야 한다.</p>
+    <p>② 을은 네이버의 검색 알고리즘 변경 등 외부 환경의 변화가 발생하는 경우에도 합리적인 범위 내에서 서비스 제공을 위한 노력을 계속하여야 한다.</p>
+    <p>③ 을은 서비스 제공 과정에서 알게 된 갑의 영업상 비밀 및 개인정보를 본 계약의 목적 외에 사용하거나 제3자에게 누설하여서는 아니 된다.</p>
+
+    <h3>제5조 (계약의 해지)</h3>
+    <p>① 갑 또는 을은 상대방이 본 계약상 주요 의무를 위반하고, 상당한 기간을 정하여 시정을 최고하였음에도 이행하지 아니하는 경우 본 계약을 해지할 수 있다.</p>
+    <p>② 갑의 단순 변심, 주관적 사정 또는 판단의 변경으로 인한 해지의 경우에는 갑의 귀책사유에 의한 해지로 본다.</p>
+    <p>③ 월 보장 계약 이후 2개월 이내에 해당 계약 키워드가 네이버 플레이스 검색 결과 첫 페이지(1~5위)에 진입하지 못할 경우 갑은 별도의 위약금 및 작업비용 부담 없이 해당 계약을 해지할 수 있다. 이 경우 을은 갑에게 계약 해지에 따른 위약금 또는 기집행 작업비용을 청구하지 아니한다.</p>
+    <p>④ 갑의 귀책사유로 인한 중도 해지 시, 갑은 제3조 제3항에 따라 산정된 기집행 비용 전액을 을에게 지급하여야 한다.</p>
+    <p>⑤ 천재지변, 전쟁, 감염병의 확산 등 불가항력적 사유로 계약 이행이 불가능한 경우, 당사자 일방은 상대방에게 서면으로 통지하고 계약을 해지할 수 있다. 이 경우 귀책사유 없는 당사자는 손해배상 책임을 부담하지 아니한다.</p>
+
+    <h3>제6조 (노출 보장 서비스)</h3>
+    <p>① 월 보장 상품의 경우, 을이 약속한 키워드를 네이버 플레이스 검색 결과 첫 페이지(5위)에 진입시킨 시점부터 대금 청구가 가능하며, 갑은 대금을 지급한 날부터 별지 계약서에 명시된 기간 동안 상위 노출(5위)이 유지됨을 보장받는다.</p>
+    <p>② 노출 보장 기간 중 갑의 플레이스가 5위 밖으로 하락한 경우, 해당 기간은 계약 기간에서 차감하지 아니하고, 재진입 후부터 계약 기간을 산정한다.</p>
+    <p>③ 보장형 계약 진행 후 갑의 플레이스가 5위 밖으로 이탈한 상태가 연속하여 1개월 이상 지속되는 경우, 을은 실제 1~5위 노출이 유지된 기간을 제외한 잔여 계약기간에 해당하는 금액을 일할 계산하여 갑에게 환불한다. 단, 환불 기준은 갑이 실제 지급한 보장 서비스 대금을 기준으로 한다.</p>
+    <p>④ 갑이 월 보장 계약 진행 후 제1항에 따른 첫 페이지(1~5위) 진입 성공 시 정당한 사유 없이 대금 지급을 거부하는 경우, 갑은 다음 각 호의 금액을 합산하여 을에게 지급하여야 한다.</p>
+    <ol>
+      <li>제3조 제3항에 따라 산정된 기집행 작업 비용</li>
+      <li>계약서에 명시된 계약 금액 전액</li>
+      <li>계약 금액의 50%에 해당하는 위약금</li>
+    </ol>
+    <div class="ex">산정 예시: 계약 금액이 100만원이고, 기집행 작업 비용이 30만원인 경우<br>기집행 작업 비용 30만원 + 계약 금액 100만원 + 위약금(계약 금액의 50%) 50만원 = 합계 180만원</div>
+    <p>⑤ 전항에 따른 금액을 을이 서면(이메일 포함)으로 청구한 날로부터 7일 이내에 지급하지 아니하는 경우, 갑은 미지급 금액에 대하여 연 15%의 지연손해금을 추가로 부담한다.</p>
+    <p>⑥ 을은 제4항 및 제5항에 따른 채권 회수를 위하여 민사소송, 지급명령 신청 등 법적 절차를 진행할 수 있으며, 이 과정에서 발생하는 소송비용, 변호사 보수 등 제반 비용은 갑이 부담한다.</p>
+    <p>⑦ 갑이 계약 체결 당시부터 대금 지급 의사 없이 허위로 계약을 체결하여 서비스를 이용한 것으로 판단되는 경우, 을은 사기죄 등으로 형사 고소할 수 있다.</p>
+
+    <h3>제7조 (손해배상)</h3>
+    <p>① 당사자 일방이 본 계약을 위반하여 상대방에게 손해를 입힌 경우, 그 손해를 배상할 책임이 있다.</p>
+    <p>② 손해배상의 범위는 통상손해를 원칙으로 하되, 특별한 사정으로 인한 손해는 당사자가 그 사정을 알았거나 알 수 있었을 경우에 한하여 배상 책임을 진다.</p>
+
+    <h3>제8조 (분쟁의 해결)</h3>
+    <p>① 본 계약에 관하여 분쟁이 발생한 경우, 당사자는 상호 협의하여 우호적으로 해결하도록 노력한다.</p>
+    <p>② 협의가 이루어지지 아니하는 경우, 을의 주사무소 소재지를 관할하는 법원을 전속 관할 법원으로 한다.</p>
+
+    <h3>제9조 (기타 사항)</h3>
+    <p>① 본 계약서에 명시되지 아니한 사항 또는 각 조항의 해석에 관하여 이견이 있는 경우, 관계 법령 및 상관례에 따른다.</p>
+    <p>② 본 계약의 내용을 변경하고자 하는 경우에는 당사자 간 서면 합의를 통하여야 하며, 구두 합의는 효력이 없다.</p>
+    <p>③ 본 계약서는 2부를 작성하여 갑과 을이 각각 1부씩 보관한다.</p>
+
+    <h3>제10조 (블로그 콘텐츠 회수 및 계약 종료 후 순위 변동에 대한 책임 제한)</h3>
+    <p>① 본 계약에 따라 네이버 플레이스 상위 노출 및 순위 상승을 목적으로 을이 기획·제작·배포한 모든 블로그 콘텐츠(이하 "작업 블로그"라 함)의 저작권 및 관리·처분 권한은 을에게 귀속된다.</p>
+    <p>② 월 보장 계약 기간 종료, 계약 만료 또는 계약 해지 시, 을은 순위 상승에 사용된 작업 블로그를 전량 회수하는 것을 원칙으로 하며, 해당 블로그에 대하여 비공개 처리, 삭제 또는 기타 회수 조치를 진행할 수 있다. 갑은 이에 대하여 어떠한 이의도 제기할 수 없다.</p>
+    <p>③ 전항에 따른 작업 블로그 회수로 인하여 갑의 네이버 플레이스 순위가 하락하거나 노출이 감소하는 경우, 이는 계약 종료에 따른 정상적인 결과로 보며, 을은 해당 순위 하락, 매출 감소, 영업상 손실 등 어떠한 손해에 대하여도 책임을 부담하지 아니한다.</p>
+    <p>④ 계약 종료 이후 작업 블로그가 유지되지 않음에 따라 발생하는 순위 유지 실패, 노출 감소 또는 경쟁 업체 대비 순위 하락에 대하여는 을의 서비스 미이행 또는 하자로 보지 아니한다.</p>
+    <p>⑤ 갑은 계약 종료 이후 을의 사전 서면 동의 없이 작업 블로그를 유지·재사용·복제·활용하거나 제3자에게 제공·요청할 수 없으며, 이를 위반할 경우 을은 민·형사상 책임을 물을 수 있다.</p>
+    <p>⑥ 본 조는 계약 종료, 계약 만료 또는 해지 이후에도 그 효력을 유지한다.</p>
+  </div>
+
+    <div class="agree">
+      <div class="q">위 사항을 모두 확인하였으며 동의합니다.</div>
+      <div class="date show-done" id="agreeDate"></div>
+      <div class="sign">성명 : <span id="signName">　　　　</span> (인)</div>
+      <div class="show-pending">
+        <button class="btn" id="okBtn" type="button" style="margin-top:18px">동의하기</button>
+        <div class="err" id="err"></div>
+      </div>
+    </div>
+
+    <div class="company">
+      <div class="bigdate show-done" id="bigDate"></div>
+      <div class="ceo">대표 김인원 <img class="seal" alt="곰컴퍼니 직인" src="data:image/png;base64,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"></div>
+      <div class="foot">사업자등록번호 : 776-32-01655 / 본사 주소 : 인천시 영종구 자연대로29, 2017호 / TEL : 010-2556-5746</div>
+      <div class="banner show-done"><div class="t1">서비스 이용 계약서</div><div class="t2" id="bannerDate"></div></div>
+    </div>
+
+    <div class="after-tools show-done">
+      <button class="btn sm" id="copyDone" type="button">동의 내용 복사</button>
+      <button class="btn sm ghost" id="printBtn" type="button" hidden>PDF로 저장</button>
+    </div>
+    <p class="note show-done">"동의 내용 복사"를 눌러 담당자 카카오톡에 붙여 넣거나, 이 화면을 캡처해 보내주세요.</p>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  // 사이트에 올린 계약서 주소 (미리보기 화면에서 링크를 만들 때 사용)
+  var BASE_URL='https://airpick-b2c.web.app/contract-ad.html';
+  var FIELDS=['product','keyword','payDate','period','amount','cName','cCeo','cTel','cBizno','cAddr'];
+  var LABEL={cName:'업체명',cCeo:'대표자',cTel:'연락처',cBizno:'사업자번호',cAddr:'주소'};
+  var $=function(id){return document.getElementById(id)};
+
+  // 링크 데이터: ?c=<base64url(JSON)>
+  function enc(o){var b=new TextEncoder().encode(JSON.stringify(o)),s='';b.forEach(function(x){s+=String.fromCharCode(x)});return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+  function dec(t){try{t=t.replace(/-/g,'+').replace(/_/g,'/');var s=atob(t),b=new Uint8Array(s.length);for(var i=0;i<s.length;i++)b[i]=s.charCodeAt(i);return JSON.parse(new TextDecoder().decode(b))}catch(e){return null}}
+  function code(o){var s=JSON.stringify(o),h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0}return 'GC-'+(h>>>0).toString(36).toUpperCase().padStart(7,'0')}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},1800)}
+  function copy(text){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast('복사했습니다')},function(){fallback(text)})}else fallback(text);
+  }
+  function fallback(text){var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('복사했습니다')}catch(e){toast('복사가 안 되면 길게 눌러 복사하세요')}ta.remove()}
+
+  var data=null;
+  function render(d){
+    data=d||{};
+    document.querySelectorAll('[data-v]').forEach(function(td){td.textContent=data[td.dataset.v]||''});
+    document.querySelectorAll('[data-c]').forEach(function(td){
+      var k=td.dataset.c;td.innerHTML='';
+      var inp=document.createElement('input');inp.dataset.in=k;inp.value=data[k]||'';
+      inp.placeholder={cName:'업체명 (상호)',cCeo:'대표자 성명',cTel:'010-0000-0000',cBizno:'000-00-00000',cAddr:'사업장 주소'}[k];
+      if(k==='cTel')inp.type='tel'; if(k==='cBizno')inp.inputMode='numeric';
+      td.appendChild(inp);
+    });
+    var ceo=document.querySelector('[data-in="cCeo"]');
+    function syncName(){$('signName').textContent=ceo.value.trim()||'　　　　'}
+    ceo.addEventListener('input',syncName);syncName();
+    $('cno').textContent=code(data);
+    $('app').classList.remove('done');$('err').textContent='';
+  }
+
+  // 동의하기
+  $('okBtn').addEventListener('click',function(){
+    var ins=document.querySelectorAll('[data-in]'),miss=[];
+    ins.forEach(function(el){if(!el.value.trim())miss.push(LABEL[el.dataset.in])});
+    if(miss.length){$('err').textContent='광고주 정보를 입력해 주세요: '+miss.join(', ');return}
+    ins.forEach(function(el){data[el.dataset.in]=el.value.trim();el.parentNode.textContent=el.value.trim()});
+    var d=new Date(),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate(),p=function(n){return String(n).padStart(2,'0')};
+    data.agreedAt=y+'-'+p(m)+'-'+p(day)+' '+p(d.getHours())+':'+p(d.getMinutes());
+    $('agreeDate').textContent=y+'년 '+m+'월 '+day+'일';
+    $('bigDate').textContent=m+'月'+day+'日'+y+'年';
+    $('bannerDate').textContent=y+'년 '+m+'월 '+day+'일 동의완료';
+    $('app').classList.add('done');
+    document.querySelector('.banner').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+
+  // 동의 내용 복사 (카톡 전달용)
+  $('copyDone').addEventListener('click',function(){
+    copy(['[곰컴퍼니 광고 계약 동의 완료]',
+      '계약번호: '+$('cno').textContent,
+      '업체명: '+data.cName,'대표자: '+data.cCeo,'연락처: '+data.cTel,'사업자번호: '+data.cBizno,'주소: '+data.cAddr,
+      '계약 상품: '+(data.product||'-'),'작업 키워드: '+(data.keyword||'-'),'계약 기간: '+(data.period||'-'),'결제 금액: '+(data.amount||'-'),
+      '동의 일시: '+data.agreedAt,
+      '위 계약 약관을 모두 확인하였으며 동의합니다.'].join('\n'));
+  });
+
+  // PDF 저장: 자체 사이트에서 열었을 때만 표시
+  var topLevel=false;try{topLevel=window.self===window.top}catch(e){}
+  if(topLevel){$('printBtn').hidden=false;$('printBtn').addEventListener('click',function(){try{window.print()}catch(e){}})}
+
+  // 작성 모드
+  function makerData(){var o={};FIELDS.forEach(function(k){var v=$('m_'+k).value.trim();if(v)o[k]=v});return o}
+  $('mkLink').addEventListener('click',function(){
+    var here=/^https?:$/.test(location.protocol)&&location.origin!=='null'&&!/claude\.ai|claudeusercontent/.test(location.host);
+    var url=(here?location.origin+location.pathname:BASE_URL)+'?c='+enc(makerData());
+    $('linkOut').value=url;$('linkWrap').hidden=false;render(makerData());
+  });
+  $('copyLink').addEventListener('click',function(){copy($('linkOut').value)});
+  $('mkPreview').addEventListener('click',function(){render(makerData());$('app').scrollIntoView({behavior:'smooth'})});
+  document.querySelectorAll('.maker input').forEach(function(el){el.addEventListener('input',function(){render(makerData())})});
+
+  // 시작: ?c= 가 있으면 광고주 화면, 없으면 작성 모드
+  var c=new URLSearchParams(location.search).get('c'),d=c?dec(c):null;
+  if(d){render(d)}else{$('maker').hidden=false;render({})}
+})();
+</script>
+</body>
+</html>
