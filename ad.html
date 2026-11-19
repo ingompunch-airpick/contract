@@ -117,6 +117,7 @@
       <label>계약 기간<input id="m_period" placeholder="예) 25일"></label>
       <label>결제 금액<input id="m_amount" placeholder="예) 3,850,000원 (VAT 포함)"></label>
     </div>
+    <div class="sub">광고주 정보(업체명·대표자 등)는 아래 계약서의 <b>광고주 정보</b> 칸에 미리 적어 두면 채워진 채로 보내집니다. 비워 두면 광고주가 직접 입력합니다.</div>
     <div class="grid" style="margin-top:12px"><label>관리 비밀번호<input id="m_pin" type="password" inputmode="numeric" placeholder="링크 만들 때 필요"></label></div>
     <div class="mk-actions">
       <button class="btn sm" id="mkLink" type="button">계약 링크 만들기</button>
@@ -402,7 +403,9 @@
   if(topLevel){$('printBtn').hidden=false;$('printBtn').addEventListener('click',function(){try{window.print()}catch(e){}})}
 
   // 작성 모드
-  function makerData(){var o={};FIELDS.forEach(function(k){var v=$('m_'+k).value.trim();if(v)o[k]=v});return o}
+  function makerData(){var o={};FIELDS.forEach(function(k){var v=$('m_'+k).value.trim();if(v)o[k]=v});
+    document.querySelectorAll('#clientTbl [data-in]').forEach(function(el){var v=el.value.trim();if(v)o[el.dataset.in]=v}); // 아래 광고주 정보 칸에 미리 적은 값도 함께 저장
+    return o}
   function baseUrl(){
     var here=/^https?:$/.test(location.protocol)&&location.origin!=='null'&&!/claude\.ai|claudeusercontent/.test(location.host);
     return here?location.origin+location.pathname:BASE_URL;
