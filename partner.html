@@ -127,14 +127,14 @@
     <h2>입점 계약서 링크 만들기 <span class="mk-tag">에어픽 전용</span></h2>
     <div class="grid">
       <label>공항<input id="m_airport" value="인천국제공항" placeholder="예) 인천국제공항"></label>
-      <label>플랫폼 수수료<input id="m_fee" value="이용요금의 19.5% (부가세 별도)" placeholder="예) 이용요금의 19.5% (부가세 별도)"></label>
-      <label>입점비<input id="m_joinFee" value="3,000,000원 (부가세 별도)"></label>
+      <label>플랫폼 수수료<input id="m_fee" value="이용요금의 19.5%" placeholder="예) 이용요금의 19.5%"></label>
+      <label>입점비<input id="m_joinFee" value="3,000,000원"></label>
       <label>입점비 비고<input id="m_joinFeeNote" placeholder="예) 면제 (기존 입점 업체)"></label>
       <label>보증금<input id="m_deposit" value="2,000,000원"></label>
       <label>보증금 비고<input id="m_depositNote" placeholder="예) 면제 (기존 입점 업체)"></label>
-      <label>업체용 앱 사용료<input id="m_appFee" value="월 50,000원 (부가세 별도)"></label>
+      <label>업체용 앱 사용료<input id="m_appFee" value="월 50,000원"></label>
       <label>앱 사용료 비고<input id="m_appFeeNote" placeholder="예) 첫 3개월 무료"></label>
-      <label>홈페이지 호스팅<input id="m_hosting" value="월 50,000원 (부가세 별도)"></label>
+      <label>홈페이지 호스팅<input id="m_hosting" value="월 50,000원"></label>
       <label>호스팅 비고<input id="m_hostingNote" placeholder="예) 홈페이지 미사용"></label>
       <label class="full">계약 기간<select id="m_period"></select></label>
     </div>
@@ -180,7 +180,7 @@
         <tr><th>확인·점검</th><td>입점 때 서류와 현장 방문으로 사업자·주차장·보험·CCTV 확인, 이후 6개월마다 재방문. 거짓 서류는 입점 취소·재입점 불가</td></tr>
         <tr><th>계약 기간</th><td><span data-v="period"></span> (만료 1개월 전까지 종료 의사가 없으면 1년씩 연장)<br>종료·해지 시 홈페이지·앱 중단, 홈페이지 폐기 (에어픽 템플릿이라 이전 불가, 낸 비용은 이용 대가라 반환 없음)</td></tr>
       </table>
-      <p class="sum-note">이해를 돕기 위한 요약입니다. 요약과 약관이 다르면 아래 약관이 우선합니다.</p>
+      <p class="sum-note">금액은 모두 부가세 별도입니다(보증금 제외). 이해를 돕기 위한 요약입니다. 요약과 약관이 다르면 아래 약관이 우선합니다.</p>
     </section>
 
     <p class="lead">공항주차 예약 플랫폼 "에어픽"을 운영하는 에어픽 공항주차(이하 "갑")와 아래 입점업체(이하 "을")는 을이 에어픽에 입점하여 주차대행 서비스를 제공하는 것에 관하여 다음과 같이 계약을 체결한다.</p>
@@ -226,6 +226,7 @@
       <tr><th>현장 결제 정산</th><td colspan="2">온라인 결제 오픈 전 현장에서 결제한 예약: 매월 말일까지 출고 완료분의 수수료를 갑이 다음 달 5일까지 청구, 을이 10일까지 지급</td></tr>
       <tr><th>계약 기간</th><td colspan="2" data-v="period"></td></tr>
     </table>
+    <p class="attach-note"><b>위 금액은 모두 부가세 별도입니다.</b> (보증금은 부가세 대상이 아닙니다)</p>
 
     <h2>계약 약관</h2>
     <div class="terms">
@@ -301,7 +302,7 @@
       <p>④ 취소·환불분은 다음 정산에서 공제하고 분쟁 중인 예약은 지급을 보류할 수 있다. 갑은 수수료 등에 세금계산서를 발행하고, 을이 내지 않은 수수료·위약금·손해배상금을 정산금에서 뺄 수 있다.</p>
       <p>⑤ 입점비: 을은 "계약 사항"에 정한 입점비를 계약일부터 7일 안에 지급한다. 서류 검수·현장 확인·사진 촬영·정보 등록의 대가로, 입점이 승인되지 않으면 전액 돌려주고 승인 후에는 돌려주지 않는다(갑의 사유로 해지되는 경우 제외).</p>
       <p>⑥ 보증금: 을은 "계약 사항"에 정한 보증금을 계약일부터 7일 안에 맡긴다. 갑은 을이 내지 않은 수수료·위약금·손해배상금·환불 부담금(제9조)을 보증금에서 뺄 수 있고, 을은 통지 후 14일 안에 다시 채운다. 계약이 끝나면 정산 후 30일 안에 남은 금액을 돌려준다.</p>
-      <p>⑦ 수수료율·입점비·보증금·월 이용료 등 금액은 업체별로 "계약 사항"에 정한다. 비고에 "면제"로 적은 항목은 적용하지 않으며, 비고 내용도 이 계약의 일부이다.</p>
+      <p>⑦ 수수료율·입점비·보증금·월 이용료 등 금액은 업체별로 "계약 사항"에 정하며, 보증금을 제외한 금액은 모두 부가세 별도이다. 비고에 "면제"로 적은 항목은 적용하지 않으며, 비고 내용도 이 계약의 일부이다.</p>
 
       <h3>제18조 (손해배상)</h3>
       <p>차량 인수부터 인도까지 생긴 이용자의 손해는 을이 배상한다. 갑은 중개자로서 을의 서비스 과정에서 생긴 손해에 책임지지 않으며(갑의 고의·과실 제외), 갑이 먼저 배상한 경우 을에게 청구할 수 있다.</p>
