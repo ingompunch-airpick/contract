@@ -78,19 +78,45 @@
     .banner .t1{font-size:23px} .banner .t2{font-size:19px}
     .maker .grid{grid-template-columns:1fr}
   }
+  .ct td.note{width:24%;font-size:14px;font-weight:700;color:var(--red)}
+  .ct tr.ct-head th{background:#eef3fb;font-size:13.5px;padding:8px 12px}
+  .sum{border:2px solid var(--blue);border-radius:12px;padding:6px 18px 14px;margin:22px 0 6px}
+  .sum h2{margin-top:14px}
+  .sum table th{width:24%;text-align:left;vertical-align:top}
+  .sum table td{font-size:14.5px}
+  .sum .sum-note{font-size:13px;color:var(--muted);margin:8px 0 0}
+  .sum b.warn{color:var(--red)}
+  @page{size:A4;margin:12mm}
   @media print{
-    body{background:#fff} .maker,.after-tools,.note,.toast,.btn{display:none!important}
-    .terms{max-height:none;overflow:visible;border:0;padding:0}
+    body{background:#fff;font-size:10pt;line-height:1.5}
+    .maker,.after-tools,.note,.toast,.btn,.loading{display:none!important}
+    .wrap{max-width:none;padding:0} .doc{padding:0}
+    header.top{padding:6px 0 8px}
+    h2{margin:14px 0 6px;font-size:11pt}
+    th,td{padding:5px 8px;font-size:9.5pt}
+    td input,td select{padding:3px 6px;font-size:9.5pt}
+    .sum{break-after:page;padding:2px 12px 10px}
+    .sum table td{font-size:9.5pt}
+    .terms{max-height:none!important;overflow:visible!important;border:0!important;padding:0!important;background:#fff!important;font-size:10pt}
+    .terms h3{margin:10px 0 2px;font-size:10pt;break-after:avoid}
+    .terms p{margin:2px 0}
+    table.pen th,table.pen td{padding:4px 8px;font-size:9pt}
+    .agree{margin-top:18px;break-inside:avoid}
+    .company{margin-top:18px;break-inside:avoid}
+    .seal{width:70px;height:70px}
+    .banner .t1{font-size:20pt}.banner .t2{font-size:15pt}
   }
 
   td select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:9px 11px;font:inherit;font-size:15px;background:#fffdf2}
   .ph{background:#fff3c4;padding:0 3px;border-radius:3px}
+  .blank{display:inline-block;width:100%;height:1.3em}
+  .maker-mode .hint,.maker-mode .agree .show-pending{display:none!important}
   .attach-note{font-size:13.5px;color:#6b7280;margin:8px 0 0}
   .maker label select{display:block;width:100%;margin-top:3px;border:1px solid #cfd4dc;border-radius:8px;padding:9px 11px;font:inherit;font-size:15px;background:#fff}
   .terms{max-height:520px}
-  .terms table.pen{margin:8px 0 4px}
-  .terms table.pen th{width:62%;text-align:left;font-weight:500;padding:9px 12px;font-size:14px}
-  .terms table.pen td{padding:9px 12px;font-size:14px}
+  table.pen{margin:8px 0 4px}
+  table.pen th{width:62%;text-align:left;font-weight:500;padding:9px 12px;font-size:14px}
+  table.pen td{padding:9px 12px;font-size:14px}
 </style>
 </head>
 <body>
@@ -98,12 +124,27 @@
 
   <!-- ① 작성 모드: 곰컴퍼니가 계약 조건을 넣고 링크를 만든다 -->
   <section class="maker" id="maker" hidden>
-    <h2>입점 계약서 링크 만들기 <span class="mk-tag">곰컴퍼니 전용</span></h2>
+    <h2>입점 계약서 링크 만들기 <span class="mk-tag">에어픽 전용</span></h2>
     <div class="grid">
-      <label>공항<input id="m_airport" placeholder="예) 인천국제공항"></label>
-      <label>플랫폼 수수료<input id="m_fee" placeholder="예) 결제금액의 10% (부가세 별도)"></label>
+      <label>공항<input id="m_airport" value="인천국제공항" placeholder="예) 인천국제공항"></label>
+      <label>플랫폼 수수료<input id="m_fee" value="이용요금의 19.5% (부가세 별도)" placeholder="예) 이용요금의 19.5% (부가세 별도)"></label>
+      <label>입점비<input id="m_joinFee" value="3,000,000원 (부가세 별도)"></label>
+      <label>입점비 비고<input id="m_joinFeeNote" placeholder="예) 면제 (기존 입점 업체)"></label>
+      <label>보증금<input id="m_deposit" value="2,000,000원"></label>
+      <label>보증금 비고<input id="m_depositNote" placeholder="예) 면제 (기존 입점 업체)"></label>
+      <label>업체용 앱 사용료<input id="m_appFee" value="월 50,000원 (부가세 별도)"></label>
+      <label>앱 사용료 비고<input id="m_appFeeNote" placeholder="예) 첫 3개월 무료"></label>
+      <label>홈페이지 호스팅<input id="m_hosting" value="월 50,000원 (부가세 별도)"></label>
+      <label>호스팅 비고<input id="m_hostingNote" placeholder="예) 홈페이지 미사용"></label>
       <label class="full">계약 기간<select id="m_period"></select></label>
-      <label class="full">특약 사항 (없으면 비워 두세요)<input id="m_special" placeholder="예) 첫 3개월 수수료 5% 적용"></label>
+    </div>
+    <div class="sub">입점업체 정보 — 비워 두면 인쇄 시 빈칸(손으로 작성), 링크로 보내면 업체가 입력합니다.</div>
+    <div class="grid">
+      <label>업체명<input id="m_cName"></label>
+      <label>대표자<input id="m_cCeo"></label>
+      <label>연락처<input id="m_cTel"></label>
+      <label>이메일<input id="m_cEmail"></label>
+      <label class="full">사업장 주소<input id="m_cAddr"></label>
     </div>
     <div class="grid" style="margin-top:12px"><label>관리 비밀번호<input id="m_pin" type="password" inputmode="numeric" placeholder="링크 만들 때 필요"></label></div>
     <div class="mk-actions">
@@ -120,19 +161,37 @@
   <!-- ② 계약서 본문 (입점업체가 보는 화면) -->
   <main class="doc" id="app">
     <header class="top">
-      <svg class="logo" viewBox="0 0 44 44" aria-hidden="true"><rect x="1.5" y="1.5" width="41" height="41" rx="4" fill="none" stroke="#c0392b" stroke-width="3"/><text x="22" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">곰컴</text><text x="22" y="35" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">퍼니</text></svg>
-      <div><div class="co">곰컴퍼니 · 에어픽(AIRPICK)</div><h1>에어픽 주차대행 서비스 입점 계약서</h1></div>
+      <svg class="logo" viewBox="0 0 44 44" aria-hidden="true"><rect x="1.5" y="1.5" width="41" height="41" rx="4" fill="none" stroke="#c0392b" stroke-width="3"/><text x="22" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">에어</text><text x="22" y="35" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b" font-family="Noto Sans KR">픽</text></svg>
+      <div><div class="co">에어픽 공항주차 · 에어픽(AIRPICK)</div><h1>에어픽 주차대행 서비스 입점 계약서</h1></div>
     </header>
     <div class="cno">계약번호 <span id="cno">-</span></div>
 
-    <p class="lead">공항주차 예약 플랫폼 "에어픽"을 운영하는 곰컴퍼니(이하 "갑")와 아래 입점업체(이하 "을")는 을이 에어픽에 입점하여 주차대행 서비스를 제공하는 것에 관하여 다음과 같이 계약을 체결한다.</p>
+    <section class="sum">
+      <h2>핵심 요약</h2>
+      <table>
+        <tr><th>수수료</th><td><b data-v="fee"></b><br>에어픽이 손님에게 준 할인·포인트는 에어픽 부담 (업체 몸은 그대로)</td></tr>
+        <tr><th>입점비·이용료</th><td>입점비 <b data-v="joinFee"></b> <b class="warn" data-v="joinFeeNote"></b> · 보증금 <b data-v="deposit"></b> <b class="warn" data-v="depositNote"></b><br>업체용 앱 <b data-v="appFee"></b> <b class="warn" data-v="appFeeNote"></b> · 홈페이지 호스팅 <b data-v="hosting"></b> <b class="warn" data-v="hostingNote"></b><br>보증금은 계약이 끝나면 정산 후 30일 안에 돌려드림 (미납 수수료·위약금 등은 빼고)</td></tr>
+        <tr><th>정산</th><td><b>온라인 결제</b>: 출고 완료 후 지급대행(토스페이먼츠)으로 수수료를 뺀 금액 지급, 결제 수수료는 에어픽 부담<br><b>현장 결제</b>: 매월 말일 기준 수수료를 다음 달 5일 청구, 10일까지 입금</td></tr>
+        <tr><th>손님 환불 규정</th><td>맡기는 시각 24시간 전까지 전액 · 그 뒤 50% · 맡긴 뒤 환불 없음</td></tr>
+        <tr><th>꼭 지킬 것</th><td>게시한 요금 그대로 · 예약한 실내/야외 그대로 보관 · 입고 사진·주차 위치 앱 등록 · 확정 예약 일방 취소 금지 · 보험·CCTV 유지</td></tr>
+        <tr><th>에어픽 안심케어</th><td>게시와 다르게 보관하면(예: 실내 예약 차를 야외에) 손님에게 전액 환불, 비용은 업체 부담 (현장 결제 건 포함)</td></tr>
+        <tr><th>손님 연락처</th><td>법정 기간 보관 가능, 광고·영업 연락 금지. 손님이 다음에 스스로 연락해 오는 것은 자유</td></tr>
+        <tr><th>가장 무거운 위반</th><td><b class="warn">예약 가로채기</b>(에어픽 예약 취소 후 같은 일정 직접 예약): 즉시 입점 취소·재입점 불가 + 이용요금 10배 또는 300만 원 중 큰 금액<br><b class="warn">손님 차 사적 운행</b>: 500만 원 + 즉시 해지</td></tr>
+        <tr><th>확인·점검</th><td>입점 때 서류와 현장 방문으로 사업자·주차장·보험·CCTV 확인, 이후 6개월마다 재방문. 거짓 서류는 입점 취소·재입점 불가</td></tr>
+        <tr><th>계약 기간</th><td><span data-v="period"></span> (만료 1개월 전까지 종료 의사가 없으면 1년씩 연장)<br>종료·해지 시 홈페이지·앱 중단, 홈페이지 폐기 (에어픽 템플릿이라 이전 불가, 낸 비용은 이용 대가라 반환 없음)</td></tr>
+      </table>
+      <p class="sum-note">이해를 돕기 위한 요약입니다. 요약과 약관이 다르면 아래 약관이 우선합니다.</p>
+    </section>
+
+    <p class="lead">공항주차 예약 플랫폼 "에어픽"을 운영하는 에어픽 공항주차(이하 "갑")와 아래 입점업체(이하 "을")는 을이 에어픽에 입점하여 주차대행 서비스를 제공하는 것에 관하여 다음과 같이 계약을 체결한다.</p>
 
     <h2>운영사 정보</h2>
     <table>
-      <tr><th>업체명</th><td>곰컴퍼니</td></tr>
+      <tr><th>상호</th><td>에어픽 공항주차</td></tr>
       <tr><th>대표자</th><td>김인원</td></tr>
       <tr><th>사업자번호</th><td>776-32-01655</td></tr>
-      <tr><th>주소</th><td>인천시 영종구 자연대로29, 2017호</td></tr>
+      <tr><th>주소</th><td>인천광역시 영종구 자연대로 29, 20층 2017호(중산동, 더스텔라)</td></tr>
+      <tr><th>연락처</th><td>0507-1328-5746 · ingompunch@gmail.com</td></tr>
     </table>
 
     <h2>입점업체 정보 <span class="hint show-pending">· 직접 입력해 주세요</span></h2>
@@ -140,10 +199,8 @@
       <tr><th>업체명</th><td data-c="cName"></td></tr>
       <tr><th>대표자</th><td data-c="cCeo"></td></tr>
       <tr><th>연락처</th><td data-c="cTel"></td></tr>
-      <tr><th>사업자번호</th><td data-c="cBizno"></td></tr>
       <tr><th>사업장 주소</th><td data-c="cAddr"></td></tr>
       <tr><th>이메일</th><td data-c="cEmail"></td></tr>
-      <tr><th>정산 계좌</th><td data-c="acct"></td></tr>
     </table>
 
     <h2>첨부 서류 <span class="hint show-pending">· 계약 후 담당자에게 보내주세요</span></h2>
@@ -152,157 +209,138 @@
       <tr><th>첨부 2</th><td>CCTV 설치 현황 (대수·녹화 범위·보관 기간)</td></tr>
       <tr><th>첨부 3</th><td>보험증권 사본</td></tr>
       <tr><th>첨부 4</th><td>사업자등록증 사본</td></tr>
+      <tr><th>첨부 5</th><td>정산 계좌 통장 사본 (사업자 또는 대표자 명의)</td></tr>
     </table>
-    <p class="attach-note">첨부 서류는 이 계약의 일부이며, 내용이 바뀌면 제9조에 따라 바뀐 서류를 다시 제출합니다.</p>
+    <p class="attach-note">첨부 서류는 이 계약의 일부이며, 내용이 바뀌면 제14조에 따라 바뀐 서류를 다시 제출합니다. 갑은 첨부 서류와 현장 방문으로 사업자·주차장·보험·CCTV를 확인한 뒤 입점을 승인합니다.</p>
 
     <h2>계약 사항</h2>
-    <table>
-      <tr><th>공항</th><td data-v="airport"></td></tr>
-      <tr><th>플랫폼 수수료</th><td data-v="fee"></td></tr>
-      <tr><th>정산</th><td>매월 1일~말일 결제분을 다음 달 10일에 지급</td></tr>
-      <tr><th>계약 기간</th><td data-v="period"></td></tr>
-      <tr id="specialRow"><th>특약 사항</th><td data-v="special"></td></tr>
+    <table class="ct">
+      <tr class="ct-head"><th>항목</th><th>내용</th><th>비고</th></tr>
+      <tr><th>공항</th><td colspan="2" data-v="airport"></td></tr>
+      <tr><th>플랫폼 수수료</th><td colspan="2" data-v="fee"></td></tr>
+      <tr><th>입점비</th><td data-v="joinFee"></td><td class="note" data-v="joinFeeNote"></td></tr>
+      <tr><th>보증금</th><td data-v="deposit"></td><td class="note" data-v="depositNote"></td></tr>
+      <tr><th>업체용 앱 사용료</th><td data-v="appFee"></td><td class="note" data-v="appFeeNote"></td></tr>
+      <tr><th>홈페이지 호스팅</th><td data-v="hosting"></td><td class="note" data-v="hostingNote"></td></tr>
+      <tr><th>온라인 결제 정산</th><td colspan="2">이용자가 에어픽에서 결제한 예약: 출고 완료 확인 후 지급대행(토스페이먼츠)으로 수수료를 뺀 금액을 을에게 지급 (결제 수수료는 갑 부담)</td></tr>
+      <tr><th>현장 결제 정산</th><td colspan="2">온라인 결제 오픈 전 현장에서 결제한 예약: 매월 말일까지 출고 완료분의 수수료를 갑이 다음 달 5일까지 청구, 을이 10일까지 지급</td></tr>
+      <tr><th>계약 기간</th><td colspan="2" data-v="period"></td></tr>
     </table>
 
     <h2>계약 약관</h2>
     <div class="terms">
       <h3>제1조 (목적)</h3>
-      <p>이 계약은 을이 갑이 운영하는 공항주차 예약 플랫폼 "에어픽"(이하 "플랫폼")에 입점하여 주차대행 서비스를 제공함에 있어 양 당사자의 권리와 의무를 정함을 목적으로 한다. 에어픽은 이용자가 소중한 차량을 믿고 맡길 수 있는 "신뢰"를 핵심 가치로 하는 플랫폼이며, 을은 이 가치를 함께 지키는 데 동의한다.</p>
+      <p>이 계약은 을이 갑이 운영하는 공항주차 예약 플랫폼 "에어픽"(이하 "플랫폼")에 입점하여 주차대행 서비스를 제공할 때 양 당사자의 권리와 의무를 정한다.</p>
 
       <h3>제2조 (정의)</h3>
-      <p>① "이용자"란 플랫폼을 통해 을의 서비스를 예약한 고객을 말한다.</p>
-      <p>② "예약"이란 이용자가 플랫폼에서 일정·차량·요금을 확정하여 결제한 건을 말한다.</p>
-      <p>③ "첨부 서류"란 을이 제출하는 주차장 운영 정보, CCTV 설치 현황, 보험증권 사본, 사업자등록증 사본을 말하며, 이 계약의 일부를 이룬다.</p>
-      <p>④ "등록 정보"란 첨부 서류와 요금·연락처 등 을이 제출하여 플랫폼에 게시되는 정보를 말한다.</p>
+      <p>① "이용자"는 플랫폼으로 을의 서비스를 예약한 고객, "예약"은 플랫폼에서 접수된 건으로 플랫폼에서 결제한 예약("온라인 결제 예약")과 현장에서 결제하는 예약("현장 결제 예약")을 모두 포함한다.</p>
+      <p>② "이용요금"은 플랫폼에 게시된 을의 요금(할증 포함)으로 계산한 금액으로, 갑이 제공한 할인·쿠폰·포인트를 빼기 전 금액이다.</p>
+      <p>③ "첨부 서류"(주차장 운영 정보, CCTV 현황, 보험증권·사업자등록증·정산 계좌 통장 사본)와 "등록 정보"(첨부 서류, 요금, 주차장 형태(실내·야외), 인계 방식, 연락처 등 플랫폼에 게시되는 정보)는 이 계약의 일부이다. "업체용 앱"은 갑이 을에게 제공하는 예약 관리 프로그램이다.</p>
 
       <h3>제3조 (계약의 성립)</h3>
-      <p>이 계약은 을이 본 전자문서의 내용을 확인하고 동의한 때에 성립하며, 서면 계약과 동일한 효력을 가진다. 갑은 동의 일시와 동의 정보를 보관하고, 을의 요청 시 사본을 제공한다.</p>
+      <p>이 계약은 을이 이 전자문서(또는 서면)에 동의한 때 성립하며, 갑은 동의 기록을 보관하고 을이 요청하면 사본을 준다.</p>
 
       <h3>제4조 (갑의 의무)</h3>
-      <p>① 갑은 플랫폼을 안정적으로 운영하고 을의 등록 정보를 이용자에게 정확하게 게시한다.</p>
-      <p>② 갑은 예약이 발생하면 지체 없이 을에게 예약 정보(일정, 차량, 항공편, 연락처 등)를 전달한다.</p>
-      <p>③ 갑은 이용자의 결제를 받아 제12조에 따라 을에게 정산하며, 이용자의 일반 문의를 1차로 응대한다.</p>
+      <p>① 갑은 을의 등록 정보를 정확하게 게시하고, 예약이 접수되면 지체 없이 업체용 앱과 알림으로 을에게 예약 정보를 전달한다.</p>
+      <p>② 갑은 이용자에게 갑이 통신판매중개자이며 거래 당사자가 아님을 알리고, 이용자의 일반 문의를 1차로 응대한다.</p>
 
-      <h3>제5조 (을의 기본 의무)</h3>
-      <p>① 을은 관련 법령을 준수하고, 영업에 필요한 신고·허가·등록을 계약 기간 동안 유지한다.</p>
-      <p>② 을은 확정된 예약을 성실히 이행하며, 약속한 인수·인도 시각과 장소를 지킨다.</p>
-      <p>③ 을은 차량을 인수하고 인도할 때마다 차량 외관 4면과 계기판(주행거리·연료량)을 사진으로 기록하여 이용자에게 제공한다.</p>
-      <p>④ 을은 차량을 운전하는 직원이 유효한 운전면허를 보유하도록 관리하고, 직원의 행위에 대하여 책임을 진다.</p>
-      <p>⑤ 을은 이용자의 차량 키를 잠금장치가 있는 보관함에 보관한다.</p>
-      <p>⑥ 을은 플랫폼에서 결제된 금액 외의 요금을 이용자에게 요구하지 않는다. 세차·연장 주차 등 추가 서비스는 미리 요금을 알리고 이용자의 동의를 받은 경우에만 제공한다.</p>
+      <h3>제5조 (입점 확인과 정기 점검)</h3>
+      <p>① 갑은 서류와 현장 방문으로 을의 사업자·주차장·보험·CCTV를 확인한 뒤 입점을 승인하고, 입점 후 6개월마다 현장을 다시 확인한다.</p>
+      <p>② 갑은 미리 알린 뒤 주차장을 점검하거나 CCTV·보험증권·입고 사진 등 자료를 요청할 수 있고, 을은 정당한 사유 없이 거부할 수 없다.</p>
+      <p>③ 서류나 확인 내용이 거짓으로 드러나면 갑은 즉시 해지할 수 있고 을은 다시 입점할 수 없다.</p>
 
-      <h3>제6조 (차량 보관 의무)</h3>
-      <p>① 을은 이용자의 차량을 첨부 서류에 기재된 주차장에만 보관한다.</p>
-      <p>② 을은 다음 각 호의 행위를 하여서는 아니 된다.</p>
-      <ol>
-        <li>등록되지 않은 장소(다른 주차장, 노상, 갓길, 이면도로, 공터 등)에 차량을 보관하는 행위</li>
-        <li>인수·인도 및 주차장 간 이동 외의 목적으로 차량을 운행하는 행위(사적 운행, 다른 업무에 사용 등)</li>
-        <li>이용자의 동의 없이 차량을 제3자에게 인도하거나 다른 업체에 재위탁하는 행위</li>
-        <li>차량 안의 물품을 임의로 사용하거나 반출하는 행위</li>
-      </ol>
-      <p>③ 을은 이용자 또는 갑이 요청하면 차량의 보관 위치를 확인할 수 있는 자료(CCTV 영상, 사진 등)를 지체 없이 제출한다.</p>
+      <h3>제6조 (을의 기본 의무)</h3>
+      <p>① 을은 법령과 영업에 필요한 신고·허가를 지키고, 확정된 예약의 인수·인도 시각과 장소를 지킨다.</p>
+      <p>② 을은 차량을 인수하면 업체용 앱에 입고 사진(외관 4면·계기판)과 주차 위치를 등록하고 진행 상태를 그때그때 바꾼다. 을은 직접 받은 예약도 업체용 앱에 등록한다.</p>
+      <p>③ 을은 운전 직원의 면허를 관리하고 직원의 행위에 책임지며, 차량 키를 잠금 보관함에 보관한다.</p>
 
-      <h3>제7조 (CCTV 운영)</h3>
-      <p>① 을은 주차장 전 구역과 키 보관함을 촬영하는 CCTV를 설치하고 24시간 녹화한다.</p>
-      <p>② 을은 녹화 영상을 30일 이상 보관하며, 사고·분쟁이 발생한 경우 해당 영상을 분쟁이 끝날 때까지 보존한다.</p>
-      <p>③ 을은 이용자 또는 갑이 사고·분쟁 확인을 위해 요청하면 관련 법령이 허용하는 범위에서 영상을 지체 없이 열람·제공한다.</p>
-      <p>④ CCTV가 고장 나거나 녹화가 중단된 경우 을은 즉시 수리하고 제9조에 따라 갑에게 알린다.</p>
+      <h3>제7조 (요금 — 게시한 그대로)</h3>
+      <p>① 을은 게시 요금(할증 포함) 외의 금액을 요구하지 않는다. 다만 현장 결제 예약의 결제 수단별 처리(부가세·카드 수수료 등)는 을이 정한다.</p>
+      <p>② 추가 서비스(세차·연장 등)는 미리 요금을 알리고 동의를 받은 경우에만 제공하며, 요금 변경은 제14조에 따라 미리 알리고 이미 접수된 예약에는 접수 당시 요금을 적용한다.</p>
 
-      <h3>제8조 (보험)</h3>
-      <p>① 을은 이용자 차량의 보관·운행 중 사고를 보상하는 영업배상책임보험(또는 이에 준하는 보험)에 가입하고 계약 기간 동안 유지한다.</p>
-      <p>② 을은 보험을 갱신·변경할 때마다 보험증권 사본을 갑에게 제출한다.</p>
-      <p>③ 보험이 만료·해지·실효된 기간에는 을은 영업할 수 없으며, 갑은 즉시 을의 상품 노출과 예약 접수를 중지할 수 있다.</p>
+      <h3>제8조 (차량 보관 의무)</h3>
+      <p>① 을은 차량을 첨부 서류의 주차장에 예약한 형태(실내·야외)대로 보관하며 보관 장소를 임의로 바꾸지 않는다.</p>
+      <p>② 을은 등록되지 않은 장소(다른 주차장·노상·갓길 등) 보관, 인수·인도·이동 외 운행(사적 운행 등), 동의 없는 제3자 인도·재위탁, 차량 안 물품의 사용·반출을 해서는 아니 되며, 요청이 있으면 보관 위치 확인 자료(CCTV·사진)를 지체 없이 제출한다.</p>
 
-      <h3>제9조 (변경 사항 고지 의무)</h3>
-      <p>① 을은 다음 각 호의 사항이 바뀌는 경우 변경 3일 전까지(미리 알 수 없었던 경우에는 변경 즉시) 갑에게 서면(이메일·메신저 포함)으로 알리고, 해당 첨부 서류를 다시 제출한다.</p>
-      <ol>
-        <li>주차장의 위치·형태·수용 대수</li>
-        <li>CCTV 설치 현황·대수, 고장 또는 녹화 중단</li>
-        <li>보험사·보상 내용·보험 기간(갱신, 변경, 해지, 만료 포함)</li>
-        <li>상호·대표자·연락처·사업자 정보·정산 계좌</li>
-        <li>영업 시간, 요금, 휴업·영업 중단</li>
-      </ol>
-      <p>② 보험의 해지·만료·실효는 사유가 생긴 때부터 24시간 이내에 알려야 한다.</p>
-      <p>③ 을이 알리지 않아 이용자 또는 갑에게 생긴 손해는 을이 부담한다.</p>
+      <h3>제9조 (에어픽 안심케어 — 게시한 그대로 보관)</h3>
+      <p>① 을은 갑이 이용자에게 "게시한 것과 다르게 보관되면 전액 환불"(에어픽 안심케어)을 안내하는 데 동의한다.</p>
+      <p>② 을이 등록 정보와 다르게 보관한 사실(실내 예약 차량의 야외 보관, 미등록 장소 보관 등)이 확인되면 이용요금 전액을 환불하고 그 비용은 을이 부담한다. 온라인 결제 예약은 갑이 환불하고 정산금에서 빼며, 현장 결제 예약은 을이 직접 환불한다(을이 지체하면 갑이 먼저 환불하고 청구할 수 있다). 이 환불은 차량 손해 배상(제18조)과 별개이다.</p>
 
-      <h3>제10조 (사고 및 민원 보고 의무)</h3>
-      <p>① 을이 차량을 인수한 때부터 인도할 때까지 다음 각 호의 일이 생기면, 을은 이를 안 즉시 이용자에게 알리고 2시간 이내에 갑에게 보고한다.</p>
-      <ol>
-        <li>사고(접촉, 파손, 도난, 침수, 화재 등)</li>
-        <li>과태료·범칙금 부과 사유(주정차 위반, 속도위반 등)</li>
-        <li>차량 고장, 키 분실</li>
-      </ol>
-      <p>② 을은 사고 현장 사진, CCTV 영상, 경위 기록을 보존하고 갑 또는 이용자의 요청 시 제출한다.</p>
-      <p>③ 을은 보험 접수 등 사고 처리를 성실히 진행하고 처리 결과를 갑에게 공유한다.</p>
-      <p>④ 차량을 보관·운행하는 동안 부과된 과태료·범칙금은 을이 부담한다.</p>
-      <p>⑤ 을은 갑으로부터 이용자 민원을 전달받으면 24시간 이내에 응대한다.</p>
+      <h3>제10조 (예약 이행과 취소)</h3>
+      <p>① 을은 확정된 예약을 일방적으로 취소할 수 없으며, 받을 수 없는 날은 미리 업체용 앱으로 예약을 막는다. 을의 사유로 예약을 이행하지 못하면 즉시 이용자와 갑에게 알리고 전액 환불과 이용자의 추가 실비(대체 주차비·교통비 등)를 부담한다.</p>
+      <p>② 이용자 취소·환불은 게시된 환불 규정(계약일 현재: 맡기는 시각 24시간 전까지 전액, 그 뒤 50%, 맡긴 뒤 없음)에 따르고, 환불하지 않은 금액은 이용요금으로 보아 정산한다. 갑은 규정을 바꾸기 전에 을에게 알린다.</p>
 
-      <h3>제11조 (직거래·우회 거래 금지)</h3>
-      <p>① 을은 플랫폼을 통해 연결된 이용자에게 플랫폼 밖에서 예약·결제하도록 유도해서는 아니 된다.</p>
-      <p>② 을은 플랫폼 예약을 취소하거나 취소를 유도한 뒤 같은 이용자로부터 직접 대금을 받아서는 아니 된다.</p>
-      <p>③ 을은 직거래·우회 거래가 해당 예약의 수수료뿐 아니라 그 이용자의 향후 재이용 수수료와 플랫폼에 대한 신뢰를 함께 잃게 한다는 점을 인정한다.</p>
-      <p>④ 을은 계약 기간 중 및 계약 종료 후 6개월 동안 플랫폼을 통해 알게 된 이용자의 연락처로 직접 영업(문자·전화·쿠폰 발송 등)을 해서는 아니 된다.</p>
+      <h3>제11조 (CCTV 운영)</h3>
+      <p>을은 주차장 전 구역과 키 보관함에 CCTV를 설치해 24시간 녹화하고 30일 이상(분쟁 시 종료까지) 보관하며, 사고·분쟁 확인 요청이 있으면 법령이 허용하는 범위에서 지체 없이 제공한다. 고장·녹화 중단 시 즉시 수리하고 제14조에 따라 알린다.</p>
 
-      <h3>제12조 (수수료 및 정산)</h3>
-      <p>① 을은 갑에게 "계약 사항"에 정한 플랫폼 수수료를 지급한다.</p>
-      <p>② 이용자는 플랫폼에서 갑에게 이용요금을 결제하며, 을은 이용자로부터 따로 대금을 받지 않는다.</p>
-      <p>③ 갑은 매월 1일부터 말일까지 결제된 예약의 이용요금에서 플랫폼 수수료와 환불 금액을 뺀 나머지를 다음 달 10일에 을의 정산 계좌로 지급한다. 10일이 휴일이면 다음 영업일에 지급한다.</p>
-      <p>④ 지급한 뒤에 취소·환불된 예약의 금액은 다음 정산에서 공제한다.</p>
-      <p>⑤ 갑은 수수료에 대하여 세금계산서를 발행하고, 을이 지급하지 않은 위약금·손해배상금을 정산금에서 공제할 수 있다.</p>
+      <h3>제12조 (보험)</h3>
+      <p>을은 차량 보관·운행 중 사고를 보상하는 영업배상책임보험(또는 이에 준하는 보험)을 유지하고 갱신·변경 때마다 증권 사본을 제출한다. 보험이 없는 기간에는 영업할 수 없으며 갑은 즉시 노출과 예약 접수를 중지할 수 있다.</p>
+      <p>을은 보험이 보상하는 운전자(연령·지정 운전자 등) 범위 안의 직원만 이용자 차량을 운전하게 하며, 범위 밖 직원의 운전으로 보상받지 못한 손해는 을이 전액 배상한다. 갑이 요청하면 을은 운전 직원 명단과 보험 적용 범위를 제출한다.</p>
 
-      <h3>제13조 (예약 취소 및 노쇼)</h3>
-      <p>① 이용자의 취소·환불은 플랫폼에 게시된 환불 규정에 따른다.</p>
-      <p>② 을의 사유(초과 예약, 일방 취소, 노쇼, 인도 지연 등)로 예약을 이행하지 못한 경우, 을은 이용자에게 환불할 금액과 이용자에게 추가로 생긴 비용(대체 주차비, 교통비 등 실비)을 부담한다.</p>
+      <h3>제13조 (정보 게시와 후기)</h3>
+      <p>① 을은 사업자등록증·보험증권 사본(개인정보는 가림), 주차장 사진, 요금, 운영 정보의 게시에 동의하고 그 내용이 사실임을 보증한다. 사실과 다르면 갑은 수정하거나 노출을 중지할 수 있다.</p>
+      <p>② 을은 후기를 직접·타인을 통해 작성하거나, 대가를 주고 부탁하거나, 정당한 사유 없이 삭제를 요구해서는 아니 된다.</p>
 
-      <h3>제14조 (손해배상)</h3>
-      <p>① 을이 차량을 인수한 때부터 인도할 때까지 생긴 사고·파손·도난 등 이용자의 손해는 을이 배상한다.</p>
-      <p>② 갑은 예약 중개 및 결제 대행자로서 을의 서비스 과정에서 생긴 손해에 책임을 지지 않는다. 다만 갑의 고의 또는 과실로 인한 손해는 그러하지 아니하다.</p>
-      <p>③ 을의 책임으로 생긴 손해를 갑이 이용자에게 먼저 배상한 경우, 갑은 을에게 그 금액을 청구할 수 있다.</p>
+      <h3>제14조 (변경 사항 고지 의무)</h3>
+      <p>을은 주차장(위치·형태·수용 대수), CCTV(현황·고장), 보험(보험사·보상 내용·기간), 사업자 정보·연락처·정산 계좌, 영업시간·요금·휴업이 바뀌면 3일 전까지(미리 알 수 없으면 즉시) 서면(이메일·메신저 포함)으로 알리고 서류를 다시 낸다. 보험 해지·만료·실효는 24시간 안에 알리며, 알리지 않아 생긴 손해는 을이 부담한다.</p>
 
-      <h3>제15조 (신뢰 훼손에 대한 위약금)</h3>
-      <p>① 을은 에어픽이 이용자의 신뢰를 기반으로 운영되는 플랫폼이며, [별표]의 위반 행위는 개별 이용자의 피해를 넘어 에어픽 전체에 대한 이용자의 신뢰와 갑의 신용·평판을 크게 훼손한다는 점을 인정한다.</p>
-      <p>② 을이 [별표]의 위반 행위를 한 경우, 위반 1건마다 [별표]의 금액을 위약금으로 갑에게 지급한다. [별표]의 금액은 제1항의 신용·평판 훼손, 직거래·우회 거래로 갑이 잃게 되는 해당 이용자의 향후 재이용 수수료, 재발 방지의 필요성을 고려하여 양 당사자가 합의한 것이다.</p>
-      <p>③ 제2항의 위약금은 위약벌로서, 위반으로 갑 또는 이용자에게 생긴 손해의 배상과는 별도로 청구할 수 있다.</p>
-      <p>④ 갑은 위반을 확인한 경우 을의 상품 노출을 중지하거나 예약 접수를 일시 중지할 수 있으며, [별표]에 "즉시 해지"로 표시된 위반은 제19조와 관계없이 즉시 계약을 해지할 수 있다.</p>
+      <h3>제15조 (사고 및 민원 보고 의무)</h3>
+      <p>① 차량 인수부터 인도까지 사고(접촉·파손·도난·침수·화재 등), 과태료 부과 사유, 고장·키 분실이 생기면 을은 즉시 이용자에게, 2시간 안에 갑에게 알리고, 사진·CCTV·경위 기록을 보존·제출하며 보험 처리 결과를 공유한다.</p>
+      <p>② 보관·운행 중 부과된 과태료·범칙금은 을이 부담하며, 을은 전달받은 이용자 민원에 24시간 안에 응대한다.</p>
 
-      <h3>제16조 (점검 및 자료 제출)</h3>
-      <p>갑은 을에게 미리 알린 뒤 영업 시간 중 주차장을 점검하거나, CCTV 운영 현황·보험증권·인수인도 사진 등 자료 제출을 요청할 수 있으며, 을은 정당한 사유 없이 이를 거부할 수 없다.</p>
+      <h3>제16조 (직거래·우회 거래 금지)</h3>
+      <p>① 을은 이용자에게 플랫폼 밖 예약·결제를 유도해서는 아니 되며, 계약 기간과 종료 후 6개월 동안 플랫폼으로 알게 된 연락처로 광고·영업 연락(문자·전화·쿠폰 등)을 해서는 아니 된다.</p>
+      <p>② 플랫폼 예약 취소 후 같은 이용자의 같은 일정 예약을 직접 받거나, 취소를 유도한 뒤 직접 받는 행위(이하 "예약 가로채기")는 갑의 영업을 방해하는 행위로 본다. 이용자가 요청해도 을은 플랫폼 예약을 안내해야 한다.</p>
+      <p>③ 예약 가로채기가 1회라도 확인되면 갑은 즉시 해지(입점 취소)하고 을은 다시 입점할 수 없으며, 갑은 [별표] 위약금과 별도로 손해배상 청구와 업무방해 등 법적 조치를 할 수 있다.</p>
+      <p>④ 이용자가 이후 다른 일정으로 스스로 을에게 연락해 예약하는 것은 위반이 아니다. 다만 을이 제1항을 어기고 유도한 경우는 그러하지 아니하다.</p>
 
-      <h3>제17조 (개인정보 보호)</h3>
-      <p>을은 갑으로부터 받은 이용자의 개인정보를 예약 이행 목적으로만 이용하고, 목적을 이루거나 계약이 끝나면 지체 없이 파기한다. 개인정보가 유출된 경우 을은 즉시 갑과 이용자에게 알리고 관련 법령에 따른 책임을 진다.</p>
+      <h3>제17조 (수수료, 입점비, 보증금 및 정산)</h3>
+      <p>① 수수료는 이용요금에 "계약 사항"의 수수료율을 곱한 금액이다. 갑이 제공한 할인·쿠폰·포인트는 갑이 부담하며 을의 몸은 줄지 않는다.</p>
+      <p>② 온라인 결제 예약: 을은 이용자에게 따로 대금을 받지 않는다. 갑은 출고 완료된 예약의 이용요금에서 수수료와 그 부가세를 뺀 금액을 지급대행(토스페이먼츠)으로 을의 정산 계좌에 지급하며, 결제(PG) 수수료는 갑이 부담한다.</p>
+      <p>③ 현장 결제 예약의 수수료와 "계약 사항"에 정한 월 이용료(업체용 앱·홈페이지 호스팅 등)는 갑이 매월 말일 기준으로 다음 달 5일까지 청구하고 을은 10일(휴일이면 다음 영업일)까지 지급하며, 갑은 이를 온라인 결제 정산금에서 뺄 수 있다.</p>
+      <p>④ 취소·환불분은 다음 정산에서 공제하고 분쟁 중인 예약은 지급을 보류할 수 있다. 갑은 수수료 등에 세금계산서를 발행하고, 을이 내지 않은 수수료·위약금·손해배상금을 정산금에서 뺄 수 있다.</p>
+      <p>⑤ 입점비: 을은 "계약 사항"에 정한 입점비를 계약일부터 7일 안에 지급한다. 서류 검수·현장 확인·사진 촬영·정보 등록의 대가로, 입점이 승인되지 않으면 전액 돌려주고 승인 후에는 돌려주지 않는다(갑의 사유로 해지되는 경우 제외).</p>
+      <p>⑥ 보증금: 을은 "계약 사항"에 정한 보증금을 계약일부터 7일 안에 맡긴다. 갑은 을이 내지 않은 수수료·위약금·손해배상금·환불 부담금(제9조)을 보증금에서 뺄 수 있고, 을은 통지 후 14일 안에 다시 채운다. 계약이 끝나면 정산 후 30일 안에 남은 금액을 돌려준다.</p>
+      <p>⑦ 수수료율·입점비·보증금·월 이용료 등 금액은 업체별로 "계약 사항"에 정한다. 비고에 "면제"로 적은 항목은 적용하지 않으며, 비고 내용도 이 계약의 일부이다.</p>
 
-      <h3>제18조 (계약 기간)</h3>
-      <p>계약 기간은 체결일부터 "계약 사항"에 정한 날까지로 하며, 만료 1개월 전까지 어느 한쪽이 종료 의사를 서면(전자문서 포함)으로 밝히지 않으면 같은 조건으로 다음 해 12월 31일까지 연장되고, 이후에도 같다.</p>
+      <h3>제18조 (손해배상)</h3>
+      <p>차량 인수부터 인도까지 생긴 이용자의 손해는 을이 배상한다. 갑은 중개자로서 을의 서비스 과정에서 생긴 손해에 책임지지 않으며(갑의 고의·과실 제외), 갑이 먼저 배상한 경우 을에게 청구할 수 있다.</p>
 
-      <h3>제19조 (계약 해지)</h3>
-      <p>① 당사자 일방이 계약을 위반한 경우 상대방은 7일 이상의 기간을 정해 시정을 요구하고, 그 기간 안에 시정되지 않으면 계약을 해지할 수 있다.</p>
-      <p>② 을에게 다음 각 호의 사유가 있으면 갑은 즉시 계약을 해지할 수 있다.</p>
-      <ol>
-        <li>차량 사적 운행 또는 등록되지 않은 장소 보관</li>
-        <li>보험 미가입 또는 보험이 실효된 상태에서의 영업</li>
-        <li>직거래·우회 거래 2회 이상</li>
-        <li>사고 은폐 또는 허위 보고</li>
-        <li>영업정지·폐업 등으로 영업할 수 없게 된 경우</li>
-      </ol>
-      <p>③ 해지 전에 확정된 예약과 정산은 이 계약에 따라 처리한다.</p>
+      <h3>제19조 (신뢰 훼손에 대한 위약금)</h3>
+      <p>① [별표]의 위반은 에어픽 전체의 신뢰를 훼손하므로, 을은 위반 1건마다 [별표]의 금액을 위약벌로 갑에게 지급하며, 이는 손해배상과 별도로 청구할 수 있다.</p>
+      <p>② 갑은 위반을 확인하면 노출·예약 접수를 중지할 수 있고, "즉시 해지" 위반은 제22조와 관계없이 즉시 해지할 수 있다.</p>
 
-      <h3>제20조 (분쟁 해결 및 기타)</h3>
-      <p>① 이 계약에 관한 분쟁은 양 당사자가 성실히 협의하여 해결하며, 협의가 되지 않으면 갑의 본점 소재지를 관할하는 법원을 제1심 법원으로 한다.</p>
-      <p>② 이 계약에 정하지 않은 사항은 관련 법령과 상관례에 따르며, 계약 내용의 변경은 양 당사자의 서면(전자문서 포함) 합의로만 할 수 있다.</p>
+      <h3>제20조 (개인정보 보호)</h3>
+      <p>을은 이용자 개인정보를 예약 이행·연락과 해당 이용자의 문의 응대에만 쓰고, 거래 기록은 법정 보존 기간(계약·결제 기록 5년, 불만·분쟁 기록 3년) 동안 보관한 뒤 파기한다. 광고·영업 연락과 제3자 제공에 쓰지 않고 안전하게 관리하며, 유출 시 즉시 갑과 이용자에게 알리고 법령에 따른 책임을 진다.</p>
 
-      <h3>[별표] 위약금 기준 (위반 1건당)</h3>
+      <h3>제21조 (계약 기간)</h3>
+      <p>계약 기간은 "계약 사항"에 정한 날까지이며, 만료 1개월 전까지 종료 의사를 서면(전자문서 포함)으로 밝히지 않으면 같은 조건으로 다음 해 12월 31일까지 연장되고 이후에도 같다.</p>
+
+      <h3>제22조 (계약 해지)</h3>
+      <p>① 계약을 위반하면 상대방은 7일 이상의 기간을 정해 시정을 요구하고, 시정되지 않으면 해지할 수 있다.</p>
+      <p>② 을에게 차량 사적 운행·미등록 장소 보관, 보험 없는 영업, 예약 가로채기(제16조 제2항) 1회 또는 그 밖의 직거래 유도 2회 이상, 사고 은폐·허위 보고, 서류·등록 정보 허위 제출(재입점 불가), 영업정지·폐업이 있으면 갑은 즉시 해지할 수 있다. 해지 전에 확정된 예약과 정산은 이 계약에 따른다.</p>
+      <p>③ 갑이 제공하는 을의 홈페이지와 업체용 앱은 갑의 템플릿으로 만든 것으로, 그 디자인·소스·기능에 대한 권리는 갑에게 있고 을에게 이전·복제·제공하지 않는다. 계약이 종료되거나 해지되면 갑은 홈페이지와 앱 사용을 중단하고 홈페이지를 폐기한다. 을 명의의 도메인은 을의 것으로, 갑은 홈페이지와의 연결만 끊는다.</p>
+      <p>④ 을이 이미 낸 입점비·월 이용료(앱·호스팅 등)는 그 기간 동안의 이용 대가이므로, 을은 이를 이유로 홈페이지·앱의 이전이나 비용 반환을 청구할 수 없다(제17조 제5항 단서의 경우 제외). 다만 을이 직접 제공한 사진·문구는 을에게 권리가 있으며 을이 요청하면 돌려준다.</p>
+
+      <h3>제23조 (분쟁 해결 및 기타)</h3>
+      <p>분쟁은 협의로 해결하고, 협의가 되지 않으면 갑의 본점 소재지 관할 법원을 제1심 법원으로 한다. 정하지 않은 사항은 법령과 상관례에 따르며, 계약 변경은 서면(전자문서 포함) 합의로만 한다.</p>
+
+    </div>
+
+    <h2>[별표] 위약금 기준 (위반 1건당)</h2>
       <table class="pen">
         <tr><th>이용자 차량 사적 운행</th><td>500만원 + 즉시 해지</td></tr>
         <tr><th>보험 미가입·실효 상태로 영업</th><td>100만원 + 즉시 해지</td></tr>
+        <tr><th>보험 적용 범위 밖 직원의 차량 운전 (제12조)</th><td>100만원, 2회째부터 즉시 해지</td></tr>
         <tr><th>등록되지 않은 장소에 차량 보관 (노상·갓길·다른 주차장 등)</th><td>100만원</td></tr>
-        <tr><th>직거래·우회 거래 (예약 취소 후 직접 대금 수령 포함)</th><td>해당 예약 이용요금의 10배 또는 100만원 중 큰 금액</td></tr>
+        <tr><th>예약한 주차장 형태와 다르게 보관 (실내 예약 차량을 야외에 보관 등)</th><td>30만원 (제9조 전액 환불과 별도)</td></tr>
+        <tr><th>예약 가로채기 (에어픽 예약 취소 후 같은 일정을 직접 예약·대금 수령)</th><td>해당 예약 이용요금의 10배 또는 300만원 중 큰 금액 + 즉시 해지(재입점 불가)</td></tr>
+        <tr><th>그 밖의 직거래·우회 거래 유도</th><td>해당 예약 이용요금의 10배 또는 100만원 중 큰 금액</td></tr>
         <tr><th>사고 미보고 또는 은폐</th><td>100만원</td></tr>
         <tr><th>주차장 변경, 보험 해지·만료 미고지</th><td>100만원</td></tr>
         <tr><th>CCTV 고장·녹화 중단 미고지</th><td>30만원</td></tr>
-        <tr><th>을의 사유로 인한 노쇼·일방 취소</th><td>10만원</td></tr>
-        <tr><th>인수·인도 사진 미기록으로 분쟁 발생</th><td>10만원</td></tr>
       </table>
-    </div>
+    <p class="attach-note">이 별표는 제19조에 따른 이 계약의 일부입니다.</p>
 
     <div class="agree">
       <div class="q">위 사항을 모두 확인하였으며, 등록 정보가 사실과 같음을 확인하고 동의합니다.</div>
@@ -316,8 +354,8 @@
 
     <div class="company">
       <div class="bigdate show-done" id="bigDate"></div>
-      <div class="ceo">대표 김인원 <img class="seal" alt="곰컴퍼니 직인" src="data:image/png;base64,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"></div>
-      <div class="foot">사업자등록번호 : 776-32-01655 / 본사 주소 : 인천시 영종구 자연대로29, 2017호 / TEL : 010-2556-5746</div>
+      <div class="ceo">대표 김인원 <img class="seal" alt="대표 직인" src="data:image/png;base64,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"></div>
+      <div class="foot">에어픽 공항주차 / 사업자등록번호 : 776-32-01655 / 주소 : 인천광역시 영종구 자연대로 29, 20층 2017호(중산동, 더스텔라) / TEL : 0507-1328-5746</div>
       <div class="banner show-done"><div class="t1">에어픽 입점 계약서</div><div class="t2" id="bannerDate"></div></div>
     </div>
 
@@ -325,7 +363,7 @@
       <button class="btn sm" id="copyDone" type="button">동의 내용 복사</button>
       <button class="btn sm ghost" id="printBtn" type="button" hidden>PDF로 저장</button>
     </div>
-    <p class="note show-done">첨부 서류 4종(주차장 운영 정보, CCTV 현황, 보험증권, 사업자등록증)을 담당자 카카오톡 또는 이메일로 보내주세요.</p>
+    <p class="note show-done">첨부 서류 5종(주차장 운영 정보, CCTV 현황, 보험증권, 사업자등록증, 통장 사본)을 담당자 카카오톡 또는 이메일로 보내주세요.</p>
   </main>
 </div>
 <div class="toast" id="toast"></div>
@@ -338,15 +376,13 @@
   var BASE_URL='https://ingompunch-airpick.github.io/contract/partner.html';
   var KIND='입점';
   // ────────────────────────────────────────────────
-  var MAKER=['airport','fee','period','special'];
+  var MAKER=['airport','fee','joinFee','joinFeeNote','deposit','depositNote','appFee','appFeeNote','hosting','hostingNote','period','cName','cCeo','cTel','cAddr','cEmail'];
   var CLIENT={
     cName:{l:'업체명',ph:'업체명 (상호)'},
     cCeo:{l:'대표자',ph:'대표자 성명'},
     cTel:{l:'연락처',ph:'010-0000-0000',t:'tel'},
-    cBizno:{l:'사업자번호',ph:'000-00-00000',num:1},
     cAddr:{l:'사업장 주소',ph:'사업자등록증상 주소'},
-    cEmail:{l:'이메일',ph:'정산서·세금계산서 받을 메일',t:'email'},
-    acct:{l:'정산 계좌',ph:'은행 / 계좌번호 / 예금주'}
+    cEmail:{l:'이메일',ph:'정산서·세금계산서 받을 메일',t:'email'}
   };
   var $=function(id){return document.getElementById(id)};
   var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
@@ -365,19 +401,20 @@
   }
 
   var data=null,contractId=null;
-  function render(d,cno){
+  function render(d,cno,mode){
     data=d||{};
+    $('app').classList.toggle('maker-mode',mode==='maker');
     document.querySelectorAll('[data-v]').forEach(function(td){td.textContent=data[td.dataset.v]||''});
-    $('specialRow').style.display=data.special?'':'none';
     document.querySelectorAll('[data-c]').forEach(function(td){
       var k=td.dataset.c,f=CLIENT[k],el;td.innerHTML='';
+      if(data[k]||mode==='maker'){if(data[k])td.textContent=data[k];else td.innerHTML='<span class="blank"></span>';return}
       if(f.opts){el=document.createElement('select');el.innerHTML='<option value="">선택</option>'+f.opts.map(function(o){return '<option>'+o+'</option>'}).join('')}
       else{el=document.createElement('input');el.placeholder=f.ph;if(f.t)el.type=f.t;if(f.num)el.inputMode='numeric'}
       el.dataset.in=k;el.value=data[k]||'';td.appendChild(el);
     });
     var ceo=document.querySelector('[data-in="cCeo"]');
-    function syncName(){$('signName').textContent=ceo.value.trim()||'　　　　'}
-    ceo.addEventListener('input',syncName);syncName();
+    function syncName(){$('signName').textContent=(ceo?ceo.value.trim():data.cCeo)||'　　　　'}
+    if(ceo)ceo.addEventListener('input',syncName);syncName();
     $('cno').textContent=cno||hash(data);
     $('app').classList.remove('done');$('err').textContent='';
   }
@@ -395,8 +432,8 @@
   }
 
   $('okBtn').addEventListener('click',function(){
-    var ins=document.querySelectorAll('[data-in]'),miss=[],client={};
-    ins.forEach(function(el){var v=el.value.trim();client[el.dataset.in]=v;if(!v)miss.push(CLIENT[el.dataset.in].l)});
+    var miss=[],client={};
+    Object.keys(CLIENT).forEach(function(k){var el=document.querySelector('[data-in="'+k+'"]'),v=el?el.value.trim():(data[k]||'');client[k]=v;if(!v)miss.push(CLIENT[k].l)});
     if(miss.length){$('err').textContent='입력해 주세요: '+miss.join(', ');return}
     var p=function(n){return String(n).padStart(2,'0')},n=new Date();
     var local=Object.assign({},data,client,{agreedAt:n.getFullYear()+'-'+p(n.getMonth()+1)+'-'+p(n.getDate())+' '+p(n.getHours())+':'+p(n.getMinutes())});
@@ -416,7 +453,7 @@
   $('copyDone').addEventListener('click',function(){
     var lines=['[에어픽 입점 계약 동의 완료]','계약번호: '+$('cno').textContent];
     Object.keys(CLIENT).forEach(function(k){lines.push(CLIENT[k].l+': '+(data[k]||'-'))});
-    lines.push('공항: '+(data.airport||'-'),'계약 기간: '+(data.period||'-'),'플랫폼 수수료: '+(data.fee||'-'),'동의 일시: '+(data.agreedAt||''),'위 계약 약관을 모두 확인하였으며 동의합니다.');
+    lines.push('공항: '+(data.airport||'-'),'계약 기간: '+(data.period||'-'),'플랫폼 수수료: '+(data.fee||'-'),'입점비: '+(data.joinFee||'-')+(data.joinFeeNote?' ('+data.joinFeeNote+')':''),'보증금: '+(data.deposit||'-')+(data.depositNote?' ('+data.depositNote+')':''),'업체용 앱 사용료: '+(data.appFee||'-')+(data.appFeeNote?' ('+data.appFeeNote+')':''),'홈페이지 호스팅: '+(data.hosting||'-')+(data.hostingNote?' ('+data.hostingNote+')':''),'동의 일시: '+(data.agreedAt||''),'위 계약 약관을 모두 확인하였으며 동의합니다.');
     copy(lines.join('\n'));
   });
 
@@ -431,24 +468,24 @@
   // 계약 기간 선택지: 올해 말 / 내년 말 (10월 이후 체결이면 내년 말이 기본)
   (function(){var n=new Date(),y=n.getFullYear(),sel=$('m_period');
     [y,y+1].forEach(function(yy){var o=document.createElement('option');o.textContent=yy+'년 12월 31일까지';sel.appendChild(o)});
-    sel.selectedIndex=n.getMonth()>=9?1:0;sel.addEventListener('change',function(){render(makerData())});})();
+    sel.selectedIndex=n.getMonth()>=9?1:0;sel.addEventListener('change',function(){render(makerData(),null,'maker')});})();
   $('m_pin').value=store.get('gc_pin')||'';
   $('mkLink').addEventListener('click',function(){
     var d=makerData();$('mkErr').textContent='';
     if(!d.airport||!d.fee){$('mkErr').textContent='공항과 플랫폼 수수료를 입력해 주세요.';return}
-    if(!SCRIPT_URL){$('linkOut').value=baseUrl()+'?c='+enc(d);$('linkWrap').hidden=false;render(d);return}
+    if(!SCRIPT_URL){$('linkOut').value=baseUrl()+'?c='+enc(d);$('linkWrap').hidden=false;render(d,null,'maker');return}
     var pin=$('m_pin').value.trim();if(!pin){$('mkErr').textContent='관리 비밀번호를 입력해 주세요.';return}
     var btn=$('mkLink');btn.disabled=true;btn.textContent='만드는 중…';
     api('POST',{action:'create',kind:KIND,pin:pin,data:d}).then(function(r){
       if(!r.ok){$('mkErr').textContent=r.error==='pin'?'관리 비밀번호가 틀렸습니다.':'링크를 만들지 못했습니다.';return}
       store.set('gc_pin',pin);
-      $('linkOut').value=baseUrl()+'?id='+r.id;$('linkWrap').hidden=false;render(d,r.id);
+      $('linkOut').value=baseUrl()+'?id='+r.id;$('linkWrap').hidden=false;render(d,r.id,'maker');
     }).catch(function(){$('mkErr').textContent='연결에 실패했습니다. 잠시 후 다시 시도해 주세요.'})
     .finally(function(){btn.disabled=false;btn.textContent='계약 링크 만들기'});
   });
   $('copyLink').addEventListener('click',function(){copy($('linkOut').value)});
-  $('mkPreview').addEventListener('click',function(){render(makerData());$('app').scrollIntoView({behavior:'smooth'})});
-  document.querySelectorAll('.maker input').forEach(function(el){if(el.id!=='m_pin')el.addEventListener('input',function(){render(makerData())})});
+  $('mkPreview').addEventListener('click',function(){render(makerData(),null,'link');$('app').scrollIntoView({behavior:'smooth'})});
+  document.querySelectorAll('.maker input').forEach(function(el){if(el.id!=='m_pin')el.addEventListener('input',function(){render(makerData(),null,'maker')})});
 
   var q=new URLSearchParams(location.search),id=q.get('id'),c=q.get('c');
   if(id&&SCRIPT_URL){
@@ -458,7 +495,7 @@
       render(r.data,r.id);if(r.status==='동의완료')showDone(r.data);$('loading').hidden=true;
     }).catch(function(){$('loading').textContent='계약서를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.'});
   }else if(c&&dec(c)){render(dec(c))}
-  else{$('maker').hidden=false;render(makerData())}
+  else{$('maker').hidden=false;render(makerData(),null,'maker')}
 })();
 </script>
 </body>
